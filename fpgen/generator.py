@@ -24,10 +24,9 @@ class ProteinGenerator:
         self,
         protein: ESMProtein, 
         unmasked_indices: list[int],
-        model_name: str = 'esm3-open',
-        device: str = 'cuda'
+        model: ESM3InferenceClient
     ) -> None:
-        self.__model: ESM3InferenceClient = ESM3.from_pretrained(model_name).to(device)
+        self.__model = model
         self.__protein = protein
         self.__prompt = masking.get_masked_protein(protein, unmasked_indices, self.__model)
     

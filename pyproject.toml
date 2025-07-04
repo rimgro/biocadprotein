@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fpgen"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
     {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
 ]
@@ -23,6 +23,8 @@ dependencies = [
     "numpy>=1.21",
     "torch>=1.10",
     "esm @ git+https://github.com/evolutionaryscale/esm.git",
+    "httpx>=0.28.1",
+    "py3Dmol>=2.5.1"
 ]
 
 [project.urls]
