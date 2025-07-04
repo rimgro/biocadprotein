@@ -19,6 +19,22 @@ from fpgen import masking
 from fpgen import metrics
 
 class ProteinGenerator:
+
+    '''
+    Класс для представления генератора новых вариантов белков на основе
+    заданного белка с использованием модели ESM3.
+    
+    Параметры:
+        protein (ESMProtein): Исходный белок, используемый для генерации
+        unmasked_indices (list[int]):
+            Индексы токенов в последовательности и структуре, которые не будут
+            маскироваться
+        model (ESM3InferenceClient): Клиент для работы с моделью ESM3
+    
+    Методы:
+        generate(...): Генерирует новый вариант белка и при необходимости вычисляет метрики
+    '''
+
     def __init__(
         self,
         protein: ESMProtein, 
@@ -37,6 +53,13 @@ class ProteinGenerator:
         
         '''
         Генерирует новый белок на основе базового белка
+
+        Параметры:
+            metric_list (list[str | metrics.CustomMetric] | None), опц.:
+                Список метрик, которые будут подсчитаны для сгенерированного белка
+
+            temperature (float), опц.:
+                Температура генерации новой молекулы
         '''
 
         # Количество токенов, которые нужно предсказать
@@ -79,6 +102,3 @@ class ProteinGenerator:
             return sequence_generation_protein, metric_scores
 
         return sequence_generation_protein
-    
-    def get_model(self) -> ESM3InferenceClient:
-        return self.__model
