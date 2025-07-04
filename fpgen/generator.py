@@ -10,7 +10,6 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
-
 from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
 from esm.models.esm3 import ESM3

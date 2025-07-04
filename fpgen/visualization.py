@@ -13,7 +13,7 @@ import py3Dmol
 from esm.sdk.api import ESMProtein
 
 def plot_protein(
-        protein,
+        protein: ESMProtein,
         width: int = 1000,
         height: int = 500,
         color: str = 'lightgreen'
