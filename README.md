@@ -1,5 +1,18 @@
 # Генерация новых флуоресцентных белков по заданным свойствам
 
-<div style="text-align: center;">
-  <img src="img/biocad_logo.png" alt="Biocad Logo" style="max-width: 450px; margin: 0 auto;">
+<br>
+
+<div align="center">
+  <img src="img/biocad_logo.png" width=300px>
+  <img src="img/bv_logo.png" width=300px>
 </div>
+<br>
+
+Описание будет дополняться...
+
+# Авторы
+- Рим Громов
+- Илья Данилович
+- Артем Андреевич
+- Мария Алексеевная
+- Никита Бакутов

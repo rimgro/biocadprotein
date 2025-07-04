@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "fpgen"
 version = "0.0.1"
 authors = [
-    {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"},
+    {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
 ]
 description = "Высокоуровневая библиотека для генерации белковых молекул"
 readme = "README.md"
