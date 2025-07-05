@@ -9,12 +9,21 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
+import biotite.sequence as seq
+import biotite.sequence.align as align
+import biotite.sequence.graphics as graphics
+
 from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
 from esm.models.esm3 import ESM3
 from esm.utils.structure.protein_chain import ProteinChain
 
 def rmsd(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
+
+    '''
+    Вычисляет метрику RMSD — это мера структурного расстояния между координатами
+    '''
+
     template_chain: ProteinChain = template_protein.to_protein_chain()
     generation_chain: ProteinChain = generation_protein.to_protein_chain()
 
@@ -22,10 +31,37 @@ def rmsd(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
     return rmsd
 
 def ptm(generation_protein: ESMProtein, *args, **kwargs) -> float:
+
+    '''
+    Вычисляет метрику PTM
+    '''
+
     return generation_protein.ptm.item()
 
 def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
+
+    '''
+    Вычисляет метрику PLDDT
+    '''
+
     return generation_protein.plddt.median().item()
+
+def seq_identity(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
+
+    '''
+    Вычисляет метрику похожести молекул
+    '''
+
+    seq1 = seq.ProteinSequence(template_protein.sequence)
+    seq2 = seq.ProteinSequence(generation_protein.sequence)
+
+    alignments = align.align_optimal(
+        seq1, seq2, align.SubstitutionMatrix.std_protein_matrix(), gap_penalty=(-10, -1)
+    )
+
+    alignment = alignments[0]
+    identity = align.get_sequence_identity(alignment)
+    return identity
 
 METRIC_NAMES = {
     'rmsd': rmsd,
