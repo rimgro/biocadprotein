@@ -76,7 +76,7 @@ class Metric:
     def __init__(
         self,
         metric_func: Callable | str,
-        calculate_on_full_atom: bool = True,
+        calculate_on_full_atom: bool = False,
         *args,
         **kwargs
     ):
