@@ -82,7 +82,7 @@ class Metric:
     ):
         if type(metric_func) == str:
             self.__func = METRIC_NAMES[metric_func]
-        elif type(metric_func) == function:
+        elif callable(metric_func):
             self.__func = metric_func
 
         self.calculate_on_full_atom = calculate_on_full_atom

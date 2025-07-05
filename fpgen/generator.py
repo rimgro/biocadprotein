@@ -106,7 +106,7 @@ class ProteinGenerator:
             for metric in metric_list:
                 if type(metric) == str:
                     func = metrics.METRIC_NAMES[metric]
-                elif type(metric) in [function, metrics.Metric]:
+                elif callable(metric):
                     func = metric
 
                 # Получение метрики
