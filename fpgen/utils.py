@@ -15,24 +15,32 @@ from openmm import Platform
 
 from esm.sdk.api import ESMProtein
 
-def fix_protein(protein: ESMProtein, filename: str = 'temp_protein.pdb') -> ESMProtein:
+def fix_protein(
+        protein: ESMProtein | None = None,
+        input_filename: str | None = None,
+        output_filename: str = 'temp_protein.pdb',
+        platform: str = 'CUDA'
+    ) -> ESMProtein:
 
     '''
     Исправляет белок
     '''
 
     root_dir = os.getcwd()
-    filename = os.path.join(root_dir, filename)
-    protein.to_pdb(filename)
+    output_path = os.path.join(root_dir, output_filename)
 
-    platform = Platform.getPlatformByName('CUDA')
-    fixer = PDBFixer(filename=filename, platform=platform)
+    if protein is not None:
+        protein.to_pdb(output_path)
+        input_filename = output_path
+
+    platform = Platform.getPlatformByName(platform)
+    fixer = PDBFixer(filename=input_filename, platform=platform)
     fixer.findMissingResidues()
     fixer.findMissingAtoms()
     fixer.addMissingAtoms()
     fixer.addMissingHydrogens(pH=7.0)
 
-    PDBFile.writeFile(fixer.topology, fixer.positions, open(filename, 'w'))
-    fixed_protein = ESMProtein.from_pdb(filename)
+    PDBFile.writeFile(fixer.topology, fixer.positions, open(output_path, 'w'))
+    fixed_protein = ESMProtein.from_pdb(output_path)
 
     return fixed_protein
