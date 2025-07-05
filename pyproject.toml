@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Высокоуровневая библиотека для генерации белковых молекул"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = {text = "MIT"}
 
 classifiers = [

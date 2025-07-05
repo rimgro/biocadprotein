@@ -9,6 +9,8 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
+from typing import Callable, Union
+
 import biotite.sequence as seq
 import biotite.sequence.align as align
 import biotite.sequence.graphics as graphics
@@ -73,7 +75,7 @@ METRIC_NAMES = {
 class Metric:
     def __init__(
         self,
-        metric_func: function | str,
+        metric_func: Callable | str,
         calculate_on_full_atom: bool = True,
         *args,
         **kwargs

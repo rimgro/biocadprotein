@@ -10,6 +10,8 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
+from typing import Callable
+
 from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
 from esm.models.esm3 import ESM3
@@ -49,7 +51,7 @@ class ProteinGenerator:
     
     def generate(
         self, 
-        metric_list: list[str | metrics.Metric | function] | None = None,
+        metric_list: list[str | metrics.Metric | Callable] | None = None,
         temperature: float = 1.0,
         fix_protein: bool = False
     ) -> ESMProtein:
