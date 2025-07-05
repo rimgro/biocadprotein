@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fpgen"
-version = "0.0.7"
+version = "0.0.8"
 authors = [
     {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
 ]

@@ -27,12 +27,15 @@ def fix_protein(protein: ESMProtein, filename: str = 'temp_protein.pdb') -> ESMP
 
     print(2)
     fixer = PDBFixer(filename=filename)
+    print(3)
     fixer.findMissingResidues()
+    print(4)
     fixer.findMissingAtoms()
+    print(5)
     fixer.addMissingAtoms()
+    print(6)
     fixer.addMissingHydrogens(pH=7.0)
 
-    print(3)
     PDBFile.writeFile(fixer.topology, fixer.positions, open(filename, 'w'))
     fixed_protein = ESMProtein.from_pdb(filename)
 
