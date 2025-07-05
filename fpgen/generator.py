@@ -17,6 +17,7 @@ from esm.utils.structure.protein_chain import ProteinChain
 
 from fpgen import masking
 from fpgen import metrics
+from fpgen import utils
 
 class ProteinGenerator:
 
@@ -48,7 +49,8 @@ class ProteinGenerator:
     def generate(
         self, 
         metric_list: list[str | metrics.CustomMetric] | None = None,
-        temperature: float = 1.0
+        temperature: float = 1.0,
+        fix_protein: bool = False
     ) -> ESMProtein:
         
         '''
@@ -83,6 +85,10 @@ class ProteinGenerator:
 
         # Декодирование последовательности в строку и структуры в координаты
         sequence_generation_protein = self.__model.decode(sequence_generation)
+
+        # Исправление белка если надо
+        if fix_protein:
+            sequence_generation_protein = utils.fix_protein(sequence_generation_protein)
 
         # Если переданы метрики
         if metric_list is not None:

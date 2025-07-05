@@ -46,7 +46,7 @@ def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
 
     return generation_protein.plddt.mean().item()
 
-def seq_identity(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
+def identity(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
 
     '''
     Вычисляет метрику похожести молекул
@@ -66,7 +66,8 @@ def seq_identity(generation_protein: ESMProtein, template_protein: ESMProtein) -
 METRIC_NAMES = {
     'rmsd': rmsd,
     'ptm': ptm,
-    'plddt': plddt
+    'plddt': plddt,
+    'identity': identity
 }
 
 class CustomMetric:
