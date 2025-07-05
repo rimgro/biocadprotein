@@ -42,11 +42,10 @@ class ProteinGenerator:
         protein: ESMProtein, 
         unmasked_indices: list[int],
         model: ESM3InferenceClient,
-        annotations: list[FunctionAnnotation] = []
     ) -> None:
         self.__model = model
         self.__protein = protein
-        self.__prompt = masking.get_masked_protein(protein, unmasked_indices, self.__model, annotations)
+        self.__prompt = masking.get_masked_protein(protein, unmasked_indices, self.__model)
     
     def generate(
         self, 

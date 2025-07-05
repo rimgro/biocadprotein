@@ -13,11 +13,12 @@ from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
 from esm.models.esm3 import ESM3
 from esm.utils.structure.protein_chain import ProteinChain
+from esm.utils.types import FunctionAnnotation
 
 def get_masked_protein(
         protein: ESMProtein,
         unmasked_indices: list[int],
-        model: ESM3InferenceClient
+        model: ESM3InferenceClient,
     ) -> ESMProtein:
     
     with torch.no_grad():
