@@ -17,6 +17,7 @@ from esm.utils.structure.protein_chain import ProteinChain
 
 from fpgen import masking
 from fpgen import metrics
+from esm.utils.types import FunctionAnnotation
 
 class ProteinGenerator:
 
@@ -39,11 +40,12 @@ class ProteinGenerator:
         self,
         protein: ESMProtein, 
         unmasked_indices: list[int],
-        model: ESM3InferenceClient
+        model: ESM3InferenceClient,
+        annotations: list[FunctionAnnotation] = []
     ) -> None:
         self.__model = model
         self.__protein = protein
-        self.__prompt = masking.get_masked_protein(protein, unmasked_indices, self.__model)
+        self.__prompt = masking.get_masked_protein(protein, unmasked_indices, self.__model, annotations)
     
     def generate(
         self, 
