@@ -70,14 +70,24 @@ METRIC_NAMES = {
     'identity': identity
 }
 
-class CustomMetric:
-    def __init__(self, metric_func: callable, *args, **kwargs):
-        self.__func = metric_func
+class Metric:
+    def __init__(
+        self,
+        metric_func: function | str,
+        calculate_on_full_atom: bool = True,
+        *args,
+        **kwargs
+    ):
+        if type(metric_func) == str:
+            self.__func = METRIC_NAMES[metric_func]
+        elif type(metric_func) == function:
+            self.__func = metric_func
+
+        self.calculate_on_full_atom = calculate_on_full_atom
         self.__args = args
         self.__kwargs = kwargs
-
+    
     def __call__(self, generation_protein: ESMProtein, template_protein: ESMProtein):
-        # При вызове объединяем init и call параметры
         return self.__func(
             generation_protein,
             template_protein,

@@ -49,7 +49,7 @@ class ProteinGenerator:
     
     def generate(
         self, 
-        metric_list: list[str | metrics.CustomMetric] | None = None,
+        metric_list: list[str | metrics.Metric | function] | None = None,
         temperature: float = 1.0,
         fix_protein: bool = False
     ) -> ESMProtein:
@@ -88,8 +88,13 @@ class ProteinGenerator:
         sequence_generation_protein = self.__model.decode(sequence_generation)
 
         # Исправление белка если надо
+        proteins = {
+            'full_atom': None,
+            'backbone': sequence_generation_protein
+        }
+        
         if fix_protein:
-            sequence_generation_protein = utils.fix_protein(sequence_generation_protein)
+            proteins['full_atom'] = utils.fix_protein(sequence_generation_protein)
 
         # Если переданы метрики
         if metric_list is not None:
@@ -99,13 +104,14 @@ class ProteinGenerator:
             for metric in metric_list:
                 if type(metric) == str:
                     func = metrics.METRIC_NAMES[metric]
-                else:
+                elif type(metric) in [function, metrics.Metric]:
                     func = metric
 
                 # Получение метрики
-                metric_score = func(sequence_generation_protein, self.__protein)
+                key = 'full_atom' if type(metric) == metrics.Metric and metric.calculate_on_full_atom else 'backbone'
+                metric_score = func(proteins[key], self.__protein)
                 metric_scores.append(metric_score)
 
-            return sequence_generation_protein, metric_scores
+            return proteins, metric_scores
 
-        return sequence_generation_protein
+        return proteins
