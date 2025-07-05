@@ -41,10 +41,10 @@ def ptm(generation_protein: ESMProtein, *args, **kwargs) -> float:
 def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
 
     '''
-    Вычисляет метрику PLDDT
+    Вычисляет метрику pLDDT (predicted Local Distance Difference Test) — метрика уверенности модели AlphaFold в точности предсказания локальной структуры (чем выше, тем точнее, диапазон 0–100).
     '''
 
-    return generation_protein.plddt.median().item()
+    return generation_protein.plddt.mean().item()
 
 def seq_identity(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
 
@@ -66,7 +66,7 @@ def seq_identity(generation_protein: ESMProtein, template_protein: ESMProtein) -
 METRIC_NAMES = {
     'rmsd': rmsd,
     'ptm': ptm,
-    'plddt': ptm
+    'plddt': plddt
 }
 
 class CustomMetric:
