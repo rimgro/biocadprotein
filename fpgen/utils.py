@@ -55,16 +55,16 @@ def get_active_site_residues(
     ) -> list[int]:
     
     '''
-    Возвращает индексы остатков в радиусе 'radius' Å от 'target_residues'.
+    Возвращает индексы аминокислот в радиусе 'radius' Å от 'target_residues'.
 
     Параметры:
-        target_residues: от какого до какого индекса считать альфа спиралью (нумерация от 1)
+        target_residues: от какого до какого индекса считать активным центром (нумерация от 1)
         protein (ESMProtein) или input_filename (str): белок или путь к PDB файлу белка
         output_filename (str), optional: имя выходного временного PDB файла
-        radius (float), optional: расстояние от альфа-спирали, которые считается активным центром (в ангстремах)
+        radius (float), optional: расстояние от активного центра, до которого считается поддерживающей оболочкой (в ангстремах)
 
     Возвращаемое значение:
-        Список из индексов (нумерация с 0) аминокислот, которые считаются активным центром
+        Список из индексов (нумерация с 0) аминокислот, которые считаются поддерживающим центром
     '''
 
     if len(target_residues) != 2:
@@ -81,9 +81,9 @@ def get_active_site_residues(
     uni = mda.Universe(input_filename)
 
     start, end = target_residues
-    # Выбор активного центра на расстоянии radius
+    # Выбор поддерживающего центра на расстоянии radius
     selection = uni.select_atoms(f'around {radius} resid {start}-{end}')
-    # Объединение с альфа-спиралью, перевод в 0-base
+    # Объединение с активным центром, перевод в 0-base
     residues = list(set(selection.residues.resids - 1)) + list(range(start - 1, end))
     
     return list(sorted(residues))
