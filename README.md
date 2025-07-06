@@ -18,6 +18,11 @@ pip install --upgrade git+https://github.com/rimgro/biocadprotein.git
 
 ## Быстрый старт
 ### Генерация нового белка
+
+<div align="center">
+  <img src="img/generation_protein.png" width=600px>
+</div>
+
 ```python
 from fpgen.generator import ProteinGenerator
 
