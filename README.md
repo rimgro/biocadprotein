@@ -48,7 +48,7 @@ model = ESM3.from_pretrained('esm3-open').to('cuda')
 # Создание генератора (на основе белка, альфа-спирали и модели)
 generator = ProteinGenerator(template_protein, aplha_phelix, model)
 # Генерация
-generated_protein = generator.generate()
+generated_protein, _ = generator.generate()
 ```
 
 **Дополнительные параметры**

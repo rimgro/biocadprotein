@@ -11,6 +11,7 @@
 # =============================================================================
 
 from typing import Callable
+from typing import Tuple
 
 from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
@@ -54,7 +55,7 @@ class ProteinGenerator:
         metric_list: list[str | metrics.Metric | Callable] | None = None,
         temperature: float = 1.0,
         fix_protein: bool = False
-    ) -> ESMProtein:
+    ) -> Tuple[ESMProtein, list[float] | None]:
         
         '''
         Генерирует новый белок на основе базового белка
@@ -65,6 +66,11 @@ class ProteinGenerator:
 
             temperature (float), опц.:
                 Температура генерации новой молекулы
+
+        Возвращемое значение:
+            кортеж из двух значений:
+                generated_protein (ESMProtein): сгенерированный белок со структурой и последовательностию
+                metric_scores (list[float] | None): список с метриками (если переданы) и None в противном случает
         '''
 
         # Количество токенов, которые нужно предсказать
@@ -116,4 +122,4 @@ class ProteinGenerator:
 
             return proteins, metric_scores
 
-        return proteins
+        return proteins, None
