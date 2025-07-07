@@ -36,7 +36,7 @@ from huggingface_hub import login
 login(token=...)
 
 # Загрузка белка, на основе которого будет генерация нового
-protein = ESMProtein.from_protein_chain(
+template_protein = ESMProtein.from_protein_chain(
     ProteinChain.from_rcsb('1qy3', chain_id='A')
 )
 # Индексы активного центра и его окружения (то, что не будет маскироваться)
@@ -46,16 +46,16 @@ aplha_phelix = [5, 133, 9, ..., 118, 120, 122]
 # Загрузка модели
 model = ESM3.from_pretrained('esm3-open').to('cuda')
 # Создание генератора (на основе белка, альфа-спирали и модели)
-generator = ProteinGenerator(protein, aplha_phelix, model)
+generator = ProteinGenerator(template_protein, aplha_phelix, model)
 # Генерация
-protein = gfp_generator.generate()
+generated_protein = generator.generate()
 ```
 
-### Дополнительные параметры
+**Дополнительные параметры**
 ```python
 from fpgen.metrics import Metric
 
-protein, metric = gfp_generator.generate(
+protein, metric = generator.generate(
     # Использование метрик
     # (calculate_on_full_atom означает, что мы будем расчитывать метрику на полноатомной структуре),
     # а не на скелете
@@ -69,6 +69,21 @@ protein, metric = gfp_generator.generate(
 )
 
 print(metric)
+```
+
+### Предсказание флуоресцентных свойств белка
+
+<div align="center">
+  <img src="img/property_prediction.png" width=600px>
+</div>
+
+```python
+from fpgen.prop_predictor import PropertiesPredictor
+
+predictor = PropertiesPredictor()
+properties = predictor.predict(generated_protein)
+
+print(properties)
 ```
 
 ## Авторы
