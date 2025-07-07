@@ -48,7 +48,7 @@ model = ESM3.from_pretrained('esm3-open').to('cuda')
 # Создание генератора (на основе белка, альфа-спирали и модели)
 generator = ProteinGenerator(template_protein, aplha_phelix, model)
 # Генерация
-generated_protein = generator.generate()
+generated_protein, _ = generator.generate()
 ```
 
 **Дополнительные параметры**
@@ -87,8 +87,12 @@ print(properties)
 ```
 
 ## Авторы
-- Рим Громов
-- Илья Данилович
-- Артем Андреевич
-- Мария Алексеевная
-- Никита Бакутов
+- [Рим Громов](https://github.com/rimgro)
+- Илья Тыщенко
+- [Артем Подлегаев](https://github.com/artemkaFismat)
+- Мария Киселева
+- [Никита Бакутов](https://github.com/droyti46)
+
+## Руководители
+- Павел Ким
+- Никита Вяткин
