@@ -13,7 +13,6 @@ from typing import Callable
 
 import biotite.sequence as seq
 import biotite.sequence.align as align
-import biotite.sequence.graphics as graphics
 
 from esm.sdk.api import ESMProtein
 from esm.utils.structure.protein_chain import ProteinChain

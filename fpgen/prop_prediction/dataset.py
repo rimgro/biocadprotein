@@ -37,12 +37,24 @@ class FPbase:
             scaler.fit(self.__df_train[[property]].dropna())
             self.__scalers[property] = scaler
 
-    def get_train(self, target_name: str) -> pd.DataFrame:
+    def get_train(self, target_name: str, is_scaled: bool = True) -> pd.DataFrame:
         not_nan_dataset = self.__df_train[[self.feature, target_name]].dropna()
+
+        if is_scaled:
+            not_nan_dataset[target_name] = self.__scalers[target_name].transform(
+                not_nan_dataset[[target_name]]
+            )
+
         return not_nan_dataset[self.feature], not_nan_dataset[target_name]
 
-    def get_test(self, target_name: str) -> pd.DataFrame:
+    def get_test(self, target_name: str, is_scaled: bool = True) -> pd.DataFrame:
         not_nan_dataset = self.__df_test[[self.feature, target_name]].dropna()
+
+        if is_scaled:
+            not_nan_dataset[target_name] = self.__scalers[target_name].transform(
+                not_nan_dataset[[target_name]]
+            )
+
         return not_nan_dataset[self.feature], not_nan_dataset[target_name]
 
     def scale_targets(self, targets, target_name: str) -> np.ndarray:
