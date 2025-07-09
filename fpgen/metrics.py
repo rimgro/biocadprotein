@@ -48,11 +48,15 @@ def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
 
     return generation_protein.plddt.mean().item()
 
-def identity(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
+def identity(generation_protein: ESMProtein | str, template_protein: ESMProtein | str) -> float:
 
     '''
     Вычисляет метрику похожести молекул
     '''
+
+    if isinstance(generation_protein, ESMProtein):
+        generation_protein = generation_protein.sequence
+        template_protein = template_protein.sequence
 
     seq1 = seq.ProteinSequence(template_protein.sequence)
     seq2 = seq.ProteinSequence(generation_protein.sequence)
