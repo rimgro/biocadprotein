@@ -13,14 +13,10 @@
 from typing import Callable
 from typing import Tuple
 
-from esm.sdk import client
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
-from esm.models.esm3 import ESM3
-from esm.utils.structure.protein_chain import ProteinChain
 
-from fpgen import masking
-from fpgen import metrics
-from esm.utils.types import FunctionAnnotation
+from fpgen.generation import masking
+from fpgen.generation import metrics
 from fpgen import utils
 
 class ProteinGenerator:

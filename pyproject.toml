@@ -8,7 +8,7 @@ version = "0.0.13"
 authors = [
     {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
 ]
-description = "Высокоуровневая библиотека для генерации белковых молекул"
+description = "Библиотека для работы с генерацией и предсказания свойств белковых молей"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}

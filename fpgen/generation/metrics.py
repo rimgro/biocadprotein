@@ -1,5 +1,5 @@
 # =============================================================================
-# metrics.py
+# generation/metrics.py
 # =============================================================================
 # Метрики качества сгенерированных белков.
 # Включает RMSD (сравнение со структурным шаблоном), pLDDT и pTM score.
@@ -9,51 +9,31 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
-from typing import Callable, Union
+from typing import Callable
 
 import biotite.sequence as seq
 import biotite.sequence.align as align
 import biotite.sequence.graphics as graphics
 
-from esm.sdk import client
-from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
-from esm.models.esm3 import ESM3
+from esm.sdk.api import ESMProtein
 from esm.utils.structure.protein_chain import ProteinChain
 
-def rmsd(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
+# --- Метрики для сравнения двух белковых молекуд ---
 
+def rmsd(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
     '''
     Вычисляет метрику RMSD — это мера структурного расстояния между координатами
     '''
-
     template_chain: ProteinChain = template_protein.to_protein_chain()
     generation_chain: ProteinChain = generation_protein.to_protein_chain()
 
     rmsd = template_chain.rmsd(generation_chain)
     return rmsd
 
-def ptm(generation_protein: ESMProtein, *args, **kwargs) -> float:
-
-    '''
-    Вычисляет метрику PTM
-    '''
-
-    return generation_protein.ptm.item()
-
-def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
-
-    '''
-    Вычисляет метрику pLDDT (predicted Local Distance Difference Test) — метрика уверенности модели AlphaFold в точности предсказания локальной структуры (чем выше, тем точнее, диапазон 0–100).
-    '''
-
-    return generation_protein.plddt.mean().item()
-
 def identity(generation_protein: ESMProtein | str, template_protein: ESMProtein | str) -> float:
-
     '''
     Вычисляет метрику похожести молекул
     '''
-
     if isinstance(generation_protein, ESMProtein):
         generation_protein = generation_protein.sequence
         template_protein = template_protein.sequence
@@ -69,12 +49,31 @@ def identity(generation_protein: ESMProtein | str, template_protein: ESMProtein 
     identity = align.get_sequence_identity(alignment)
     return identity
 
+# --- Метрики для метрик существования белков ---
+
+def ptm(generation_protein: ESMProtein, *args, **kwargs) -> float:
+    '''
+    Вычисляет метрику PTM
+    '''
+    return generation_protein.ptm.item()
+
+def plddt(generation_protein: ESMProtein, *args, **kwargs) -> float:
+    '''
+    Вычисляет метрику pLDDT (predicted Local Distance Difference Test) — метрика уверенности модели AlphaFold в точности предсказания локальной структуры (чем выше, тем точнее, диапазон 0–100).
+    '''
+    return generation_protein.plddt.mean().item()
+
+
+# --- Словарь со всеми метриками ---
+
 METRIC_NAMES = {
     'rmsd': rmsd,
     'ptm': ptm,
     'plddt': plddt,
     'identity': identity
 }
+
+# --- Абстрактный класс для метрик ---
 
 class Metric:
     def __init__(

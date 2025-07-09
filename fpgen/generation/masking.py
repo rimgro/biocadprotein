@@ -10,10 +10,7 @@
 
 import torch
 from esm.sdk import client
-from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
-from esm.models.esm3 import ESM3
-from esm.utils.structure.protein_chain import ProteinChain
-from esm.utils.types import FunctionAnnotation
+from esm.sdk.api import ESM3InferenceClient, ESMProtein
 
 def get_masked_protein(
         protein: ESMProtein,

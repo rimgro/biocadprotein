@@ -24,7 +24,7 @@ pip install --upgrade git+https://github.com/rimgro/biocadprotein.git
 </div>
 
 ```python
-from fpgen.generator import ProteinGenerator
+from fpgen.generation.generator import ProteinGenerator
 
 from esm.models.esm3 import ESM3
 from esm.sdk.api import ESMProtein
@@ -53,7 +53,7 @@ generated_protein, _ = generator.generate()
 
 **Дополнительные параметры**
 ```python
-from fpgen.metrics import Metric
+from fpgen.generation.metrics import Metric
 
 protein, metric = generator.generate(
     # Использование метрик
@@ -78,7 +78,7 @@ print(metric)
 </div>
 
 ```python
-from fpgen.prop_predictor import PropertiesPredictor
+from fpgen.prop_prediction.predictor import PropertiesPredictor
 
 predictor = PropertiesPredictor()
 properties = predictor.predict(generated_protein)
