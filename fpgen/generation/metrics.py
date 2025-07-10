@@ -36,10 +36,10 @@ def identity(generation_protein_seq: ESMProtein | str, template_protein_seq: ESM
     '''
 
     # Если generation_protein это белок ESM3, то извлекаем последовательность аминокислот
-    if isinstance(generation_protein_seq, ESMProtein):
+    if hasattr(generation_protein_seq, 'sequence'):
         generation_protein_seq = generation_protein_seq.sequence
 
-    if isinstance(template_protein_seq, ESMProtein):
+    if hasattr(template_protein_seq, 'sequence'):
         template_protein_seq = template_protein_seq.sequence
 
     # Обертка в класс последовательности
