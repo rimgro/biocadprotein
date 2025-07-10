@@ -42,7 +42,7 @@ class FPbase:
 
     _instance = None
 
-    def __new__(cls, dataset_path: str):
+    def __new__(cls, dataset_path: str | None = None):
         # Проврека на то, сущестует ли уже экземпляр этого класса
         if cls._instance is None:
             cls._instance = super(FPbase, cls).__new__(cls)
