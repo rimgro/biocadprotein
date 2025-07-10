@@ -8,6 +8,7 @@
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
+import os
 from typing import Dict
 
 import numpy as np
@@ -15,6 +16,11 @@ import pandas as pd
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+
+# --- Константы ---
+
+# Путь к датасету по умолчанию
+DEFAULT_DATASET_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'dataset.csv')
 
 # --- Основной класс ---
 
@@ -41,6 +47,13 @@ class FPbase:
         if cls._instance is None:
             cls._instance = super(FPbase, cls).__new__(cls)
             cls._instance.__initialized = False
+            
+            # Если путь не указан, используем путь по умолчанию
+            if dataset_path is None:
+                dataset_path = DEFAULT_DATASET_PATH
+                
+            # Инициализируем экземпляр
+            cls._instance.__init__(dataset_path)
         return cls._instance
 
     def __init__(self, dataset_path: str):

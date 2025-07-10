@@ -40,4 +40,4 @@ packages = ["fpgen"]
 package-dir = {"" = "."}
 
 [tool.setuptools.package-data]
-"fpgen" = ["*.py", "*.txt", "*.md"]
+"fpgen" = ["*.py", "*.txt", "*.md", "*.csv", "data/*.csv", "*.json"]

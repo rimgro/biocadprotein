@@ -84,6 +84,27 @@ METRIC_NAMES = {
 # --- Абстрактный класс для метрик ---
 
 class Metric:
+
+    '''
+    Абстрактный класс для представления метрики
+
+    Параметры:
+        metric_func (Callable | str):
+            Функция (либо ее название, если используете стандартные метрики)
+
+        Может принимать дополнительные параметры, которые будут переданы в функцию метрики
+
+    Примеры:
+        >>> from fpgen.generation.metrics import Metric
+
+        >>> protein = ...
+        >>> ptm_metric = Metric('ptm')
+        >>> ptm_metric(protein)
+
+        >>> len_metric = Metric(lambda x: len(x.sequence))
+        >>> len_metric(protein)
+    '''
+
     def __init__(
         self,
         metric_func: Callable | str,
