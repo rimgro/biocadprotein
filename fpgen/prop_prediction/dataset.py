@@ -15,7 +15,14 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
+# --- Основной класс ---
+
 class FPbase:
+
+    '''
+    Класс для представления базы данных FPbase для обучения модели предсказывать свойства
+    '''
+
     def __init__(self, dataset_path: str):
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
 

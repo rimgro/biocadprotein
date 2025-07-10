@@ -29,22 +29,31 @@ def rmsd(generation_protein: ESMProtein, template_protein: ESMProtein) -> float:
     rmsd = template_chain.rmsd(generation_chain)
     return rmsd
 
-def identity(generation_protein: ESMProtein | str, template_protein: ESMProtein | str) -> float:
+def identity(generation_protein_seq: ESMProtein | str, template_protein_seq: ESMProtein | str) -> float:
+
     '''
     Вычисляет метрику похожести молекул
     '''
-    if isinstance(generation_protein, ESMProtein):
-        generation_protein = generation_protein.sequence
-        template_protein = template_protein.sequence
 
-    seq1 = seq.ProteinSequence(template_protein.sequence)
-    seq2 = seq.ProteinSequence(generation_protein.sequence)
+    # Если generation_protein это белок ESM3, то извлекаем последовательность аминокислот
+    if isinstance(generation_protein_seq, ESMProtein):
+        generation_protein_seq = generation_protein_seq.sequence
 
+    if isinstance(template_protein_seq, ESMProtein):
+        template_protein_seq = template_protein_seq.sequence
+
+    # Обертка в класс последовательности
+    seq1 = seq.ProteinSequence(template_protein_seq)
+    seq2 = seq.ProteinSequence(generation_protein_seq)
+    
+    # Выравнивание
     alignments = align.align_optimal(
         seq1, seq2, align.SubstitutionMatrix.std_protein_matrix(), gap_penalty=(-10, -1)
     )
 
     alignment = alignments[0]
+
+    # Получение метрики
     identity = align.get_sequence_identity(alignment)
     return identity
 
