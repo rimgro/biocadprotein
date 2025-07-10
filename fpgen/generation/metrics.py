@@ -48,7 +48,11 @@ def identity(generation_protein_seq: ESMProtein | str, template_protein_seq: ESM
     
     # Выравнивание
     alignments = align.align_optimal(
-        seq1, seq2, align.SubstitutionMatrix.std_protein_matrix(), gap_penalty=(-10, -1)
+        seq1,
+        seq2,
+        align.SubstitutionMatrix.std_protein_matrix(),
+        gap_penalty=(-10, -1),
+        terminal_penalty=False
     )
 
     alignment = alignments[0]
