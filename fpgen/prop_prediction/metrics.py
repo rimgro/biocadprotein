@@ -42,13 +42,13 @@ CLASSIFICATION_METRIC_NAMES: Dict[str, Callable] = {
 
 # --- Функция для подсчета метрик ---
 
-def get_regression_metrics(y_pred: np.ndarray, y_true: np.ndarray, metric_type: str) -> Dict[str, float]:
+def get_regression_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[str, float]:
     return {
         metric_name: metric_fn(y_true, y_pred)
         for metric_name, metric_fn in REGRESSION_METRIC_NAMES.items()
     }
 
-def get_classification_metrics(y_pred: np.ndarray, y_true: np.ndarray, metric_type: str) -> Dict[str, float]:
+def get_classification_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[str, float]:
     return {
         metric_name: metric_fn(y_true, y_pred)
         for metric_name, metric_fn in CLASSIFICATION_METRIC_NAMES.items()
