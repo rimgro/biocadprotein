@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fpgen"
-version = "0.0.15"
+version = "0.0.18"
 authors = [
     {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
 ]
@@ -40,4 +40,4 @@ packages = ["fpgen"]
 package-dir = {"" = "."}
 
 [tool.setuptools.package-data]
-"fpgen" = ["*.py", "*.txt", "*.md"]
+"fpgen" = ["*.py", "*.txt", "*.md", "*.csv", "data/*.csv", "*.json"]

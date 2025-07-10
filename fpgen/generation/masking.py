@@ -17,11 +17,15 @@ def get_masked_protein(
         unmasked_indices: list[int],
         model: ESM3InferenceClient,
     ) -> ESMProtein:
+
+
+    '''
+    Маскирует белок
+    '''
     
     with torch.no_grad():
         # Токенизация
-        with torch.no_grad():
-            protein_tokens = model.encode(protein)
+        protein_tokens = model.encode(protein)
 
         # Замаскированная последовательность
         prompt_seq = ['_'] * len(protein.sequence)
