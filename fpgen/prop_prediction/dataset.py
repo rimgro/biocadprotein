@@ -20,7 +20,9 @@ from sklearn.model_selection import train_test_split
 # --- Константы ---
 
 # Путь к датасету по умолчанию
-DEFAULT_DATASET_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'dataset.csv')
+DEFAULT_DATASET_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'dataset.csv')
+)
 
 # --- Основной класс ---
 
@@ -59,7 +61,7 @@ class FPbase:
 
     def __init__(
             self,
-            dataset_path: str,
+            dataset_path: str | None = None,
             preprocess_function: Callable | None = None
         ) -> None:
         if self.__initialized:
@@ -70,8 +72,11 @@ class FPbase:
         # Чтение данных
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
 
+        # Численные свойства
+        self.__regression_targets = []
+
         # Публичные поля
-        self.properties: list = list(self.__dataset.columns)[1:]
+        self.targets: list = list(self.__dataset.columns)[1:]
         self.feature: str = self.__dataset.columns[0]
 
         # Если передана функция для предобработки, то предобрабатываем все X
@@ -86,14 +91,17 @@ class FPbase:
         self.__scalers: Dict[str, StandardScaler] = {}
 
         # Добавление скейлеров для каждого свойства
-        for property in self.properties:
+        for target in self.targets:
             # Проверка: является ли колонка числовой. Если нет, то пропускаем
-            if not pd.api.types.is_float_dtype(self.__df_train[property]):
+            if not pd.api.types.is_float_dtype(self.__df_train[target]):
                 continue
 
+            self.__regression_targets.append(target)
+
+            # Обучение скейлера
             scaler: StandardScaler = StandardScaler()
-            scaler.fit(self.__df_train[[property]].dropna())
-            self.__scalers[property] = scaler
+            scaler.fit(self.__df_train[[target]].dropna())
+            self.__scalers[target] = scaler
 
     def get_train(self, target_name: str, is_scaled: bool = True) -> pd.DataFrame:
 
@@ -131,11 +139,51 @@ class FPbase:
 
     def scale_targets(self, targets, target_name: str) -> np.ndarray:
         '''Масштабирует таргеты'''
+        if not self.is_regression_target(target_name):
+            return targets
         return self.__scalers[target_name].transform(pd.DataFrame(targets))
     
     def rescale_targets(self, targets, target_name: str) -> np.ndarray:
         '''Размасштабирует таргеты'''
+        if not self.is_regression_target(target_name):
+            return targets
         return self.__scalers[target_name].inverse_transform(pd.DataFrame(targets))
     
     def to_dataframe(self) -> pd.DataFrame:
         return self.__dataset
+    
+    def to_train_dataframe(self, is_scaled: bool = True) -> pd.DataFrame:
+
+        '''
+        Возвращает тренировочный датафрейм
+        Параметр is_scaled отвечает за масштабирование таргетов
+        '''
+
+        processed_df = self.__df_train.copy()
+
+        if is_scaled:
+            for target in self.targets:
+                if self.is_regression_target(target):
+                    processed_df[target] = self.scale_targets(processed_df[target], target)
+
+        return processed_df
+    
+    def to_test_dataframe(self, is_scaled: bool = True) -> pd.DataFrame:
+
+        '''
+        Возвращает тестовый датафрейм
+        Параметр is_scaled отвечает за масштабирование таргетов
+        '''
+        
+        processed_df = self.__df_test.copy()
+
+        if is_scaled:
+            for target in self.targets:
+                if self.is_regression_target(target):
+                    processed_df[target] = self.scale_targets(processed_df[target], target)
+
+        return processed_df
+    
+    def is_regression_target(self, target_name: str) -> bool:
+        '''Проверяем, является ли свойство регрессионным'''
+        return target_name in self.__regression_targets
