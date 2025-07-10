@@ -19,6 +19,8 @@ from fpgen.generation import masking
 from fpgen.generation import metrics
 from fpgen import utils
 
+# --- Основной класс ---
+
 class ProteinGenerator:
 
     '''
