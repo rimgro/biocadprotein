@@ -30,7 +30,6 @@ class FPbase:
 
     '''
     Класс для представления базы данных FPbase для обучения модели предсказывать свойства
-    Реализован как Singleton - может существовать только один экземпляр класса.
 
     Параметры:
         dataset_path (str): путь к .csv таблице FPbase (например, data/dataset.csv)
@@ -42,32 +41,14 @@ class FPbase:
         >>> x_test, y_test = dataset.get_test('ex_max', is_scaled=True)
     '''
 
-    _instance = None
-
-    def __new__(cls, dataset_path: str | None = None, *args, **kwargs):
-        # Проврека на то, сущестует ли уже экземпляр этого класса
-        if cls._instance is None:
-            cls._instance = super(FPbase, cls).__new__(cls)
-            cls._instance.__initialized = False
-            
-            # Если путь не указан, используем путь по умолчанию
-            if dataset_path is None:
-                dataset_path = DEFAULT_DATASET_PATH
-                
-            # Инициализируем экземпляр
-            cls._instance.__init__(dataset_path, *args, **kwargs)
-
-        return cls._instance
-
     def __init__(
             self,
             dataset_path: str | None = None,
-            preprocess_function: Callable | None = None
+            preprocess_function: Callable | None = None,
+            random_state: int = 52
         ) -> None:
-        if self.__initialized:
-            return
-        
-        self.__initialized = True
+        if dataset_path is None:
+            dataset_path = DEFAULT_DATASET_PATH
 
         # Чтение данных
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
@@ -85,7 +66,7 @@ class FPbase:
         
         # Разбиение данных
         self.__df_train, self.__df_test = train_test_split(
-            self.__dataset, test_size=0.2, random_state=52
+            self.__dataset, test_size=0.2, random_state=random_state
         )
 
         self.__scalers: Dict[str, StandardScaler] = {}

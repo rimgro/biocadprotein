@@ -14,6 +14,9 @@ def test_fpbase_initialization():
     dataset2 = FPbase()
     assert dataset is dataset2
 
+def test_preprocess_function():
+    dataset = FPbase(preprocess_function=lambda seq: len(seq))
+
 def test_scaling_and_rescaling():
     dataset = FPbase()
 
