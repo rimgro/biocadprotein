@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Библиотека для работы с генерацией и предсказания свойств белковых молей"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 license = {text = "MIT"}
 
 classifiers = [

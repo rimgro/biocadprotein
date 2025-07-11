@@ -9,7 +9,7 @@
 # =============================================================================
 
 import os
-from typing import Dict, Callable
+from typing import Dict, Callable, Tuple
 
 import numpy as np
 import pandas as pd
@@ -103,7 +103,7 @@ class FPbase:
             scaler.fit(self.__df_train[[target]].dropna())
             self.__scalers[target] = scaler
 
-    def get_train(self, target_name: str, is_scaled: bool = True) -> pd.DataFrame:
+    def get_train(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
 
         '''
         Возвращает датафрейм (x, y) для переданного свойства из тренировочной выборки
@@ -119,7 +119,7 @@ class FPbase:
 
         return not_nan_dataset[self.feature], not_nan_dataset[target_name]
 
-    def get_test(self, target_name: str, is_scaled: bool = True) -> pd.DataFrame:
+    def get_test(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
 
         '''
         Возвращает датафрейм (x, y) для переданного свойства из тестовой выборки
@@ -137,13 +137,13 @@ class FPbase:
 
         return not_nan_dataset[self.feature], not_nan_dataset[target_name]
 
-    def scale_targets(self, targets, target_name: str) -> np.ndarray:
+    def scale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
         '''Масштабирует таргеты'''
         if not self.is_regression_target(target_name):
             return targets
         return self.__scalers[target_name].transform(pd.DataFrame(targets))
     
-    def rescale_targets(self, targets, target_name: str) -> np.ndarray:
+    def rescale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
         '''Размасштабирует таргеты'''
         if not self.is_regression_target(target_name):
             return targets
