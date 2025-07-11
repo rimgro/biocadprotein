@@ -53,12 +53,12 @@ class FPbase:
         # Чтение данных
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
 
-        # Численные свойства
-        self.__regression_targets = []
-
         # Публичные поля
         self.targets: list = list(self.__dataset.columns)[1:]
         self.feature: str = self.__dataset.columns[0]
+
+        self.regression_targets = []
+        self.classification_targets = []
 
         # Если передана функция для предобработки, то предобрабатываем все X
         if preprocess_function is not None:
@@ -75,9 +75,10 @@ class FPbase:
         for target in self.targets:
             # Проверка: является ли колонка числовой. Если нет, то пропускаем
             if not pd.api.types.is_float_dtype(self.__df_train[target]):
+                self.classification_targets.append(target)
                 continue
 
-            self.__regression_targets.append(target)
+            self.regression_targets.append(target)
 
             # Обучение скейлера
             scaler: StandardScaler = StandardScaler()
@@ -91,7 +92,8 @@ class FPbase:
         Параметр is_scaled отвечает за масштабирование таргетов
         '''
 
-        not_nan_dataset: pd.DataFrame = self.__df_train[[self.feature, target_name]].dropna()
+        not_nan_dataset: pd.DataFrame = self.__df_train[[self.feature, target_name]].dropna() \
+                                                                                    .reset_index(drop=True)
 
         if is_scaled:
             not_nan_dataset[target_name] = self.__scalers[target_name].transform(
@@ -109,7 +111,8 @@ class FPbase:
         TODO: перенести get_train и get_test в одну функцию и вызывать ее из этих методов
         '''
 
-        not_nan_dataset: pd.DataFrame = self.__df_test[[self.feature, target_name]].dropna()
+        not_nan_dataset: pd.DataFrame = self.__df_test[[self.feature, target_name]].dropna() \
+                                                                                   .reset_index(drop=True)
 
         if is_scaled:
             not_nan_dataset[target_name] = self.__scalers[target_name].transform(
@@ -140,7 +143,7 @@ class FPbase:
         Параметр is_scaled отвечает за масштабирование таргетов
         '''
 
-        processed_df = self.__df_train.copy()
+        processed_df = self.__df_train.copy().reset_index(drop=True)
 
         if is_scaled:
             for target in self.targets:
@@ -156,7 +159,7 @@ class FPbase:
         Параметр is_scaled отвечает за масштабирование таргетов
         '''
         
-        processed_df = self.__df_test.copy()
+        processed_df = self.__df_test.copy().reset_index(drop=True)
 
         if is_scaled:
             for target in self.targets:
@@ -167,4 +170,8 @@ class FPbase:
     
     def is_regression_target(self, target_name: str) -> bool:
         '''Проверяем, является ли свойство регрессионным'''
-        return target_name in self.__regression_targets
+        return target_name in self.regression_targets
+    
+    def is_classification_target(self, target_name: str) -> bool:
+        '''Проверяем, является ли свойство классифицируемым'''
+        return target_name in self.classification_targets
