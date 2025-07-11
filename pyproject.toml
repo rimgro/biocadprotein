@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fpgen"
+version = "0.0.18"
+authors = [
+    {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
+]
+description = "Библиотека для работы с генерацией и предсказания свойств белковых молей"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy>=1.21",
+    "torch>=1.10",
+    "esm @ git+https://github.com/evolutionaryscale/esm.git",
+    "pdbfixer @ git+https://github.com/openmm/pdbfixer.git@5a6c129fb5b508610542634eafa218fb0e0671fe",
+    "OpenMM==8.3.0",
+    "httpx>=0.28.1",
+    "py3Dmol>=2.5.1",
+    "MDAnalysis>=2.9.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/rimgro/biocadprotein/"
+Repository = "https://github.com/rimgro/biocadprotein"
+"Bug Tracker" = "https://github.com/rimgro/biocadprotein/issues"
+
+[tool.setuptools]
+packages = ["fpgen"]
+package-dir = {"" = "."}
+
+[tool.setuptools.package-data]
+"fpgen" = ["*.py", "*.txt", "*.md", "*.csv", "data/*.csv", "*.json"]
