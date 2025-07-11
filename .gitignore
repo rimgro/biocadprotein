@@ -213,4 +213,5 @@ __marimo__/
 temp_protein.pdb
 a.ipynb
 /artem/
+.vscode
 /data/sequence.pickle
