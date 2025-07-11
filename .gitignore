@@ -212,3 +212,5 @@ __marimo__/
 # Проект
 temp_protein.pdb
 a.ipynb
+/artem/
+/data/sequence.pickle
