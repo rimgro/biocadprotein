@@ -212,3 +212,6 @@ __marimo__/
 # Проект
 temp_protein.pdb
 a.ipynb
+
+best_cnn_model.pth
+sequence.pickle
