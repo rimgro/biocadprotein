@@ -85,55 +85,88 @@ class FPbase:
             scaler.fit(self.__df_train[[target]].dropna())
             self.__scalers[target] = scaler
 
+    def __preprocess_dataframe(
+            self,
+            dataframe: pd.DataFrame,
+            target_name: str,
+            is_scaled: bool = True
+        ) -> Tuple[pd.Series, pd.Series]:
+
+        '''
+        Обрабатывает датафрейм и возвращает (x, y)
+
+        Парметры:
+            target_name (str): название таргета
+            is_scaled (bool), опц.: нужно ли масштабировать таргеты
+        '''
+
+        # Обработанный датасет
+        processed_dataset: pd.DataFrame = dataframe[[self.feature, target_name]].dropna() \
+                                                                                .reset_index(drop=True)
+
+        # Масштабирование признаков
+        if is_scaled:
+            processed_dataset[target_name] = self.__scalers[target_name].transform(
+                processed_dataset[[target_name]]
+            )
+
+        # Получение пар (x, y)
+        x = processed_dataset[self.feature]
+        y = processed_dataset[target_name].values
+
+        return x, y
+
     def get_train(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
 
         '''
-        Возвращает датафрейм (x, y) для переданного свойства из тренировочной выборки
-        Параметр is_scaled отвечает за масштабирование таргетов
+        Возвращает пары (x, y) для переданного свойства из тренировочной выборки
+        Параметры: см. FPbase.__preprocess_dataframe
         '''
 
-        not_nan_dataset: pd.DataFrame = self.__df_train[[self.feature, target_name]].dropna() \
-                                                                                    .reset_index(drop=True)
-
-        if is_scaled:
-            not_nan_dataset[target_name] = self.__scalers[target_name].transform(
-                not_nan_dataset[[target_name]]
-            )
-
-        return not_nan_dataset[self.feature], not_nan_dataset[target_name]
+        return self.__preprocess_dataframe(self.__df_train, target_name, is_scaled)
 
     def get_test(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
 
         '''
-        Возвращает датафрейм (x, y) для переданного свойства из тестовой выборки
-        Параметр is_scaled отвечает за масштабирование таргетов
-
-        TODO: перенести get_train и get_test в одну функцию и вызывать ее из этих методов
+        Возвращает пары (x, y) для переданного свойства из тестовой выборки
+        Парметры: см. FPbase.__preprocess_dataframe
         '''
 
-        not_nan_dataset: pd.DataFrame = self.__df_test[[self.feature, target_name]].dropna() \
-                                                                                   .reset_index(drop=True)
-
-        if is_scaled:
-            not_nan_dataset[target_name] = self.__scalers[target_name].transform(
-                not_nan_dataset[[target_name]]
-            )
-
-        return not_nan_dataset[self.feature], not_nan_dataset[target_name]
+        return self.__preprocess_dataframe(self.__df_test, target_name, is_scaled)
 
     def scale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
-        '''Масштабирует таргеты'''
+
+        '''
+        Масштабирует таргеты
+        
+        Параметры:
+            targets (np.ndarray | pd.Series): список таргетов
+            target_name (str): название таргета, который нужно масштабировать
+        '''
+
         if not self.is_regression_target(target_name):
             return targets
+        
         return self.__scalers[target_name].transform(pd.DataFrame(targets))
     
     def rescale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
-        '''Размасштабирует таргеты'''
+
+        '''
+        Размасштабирует таргеты
+        Параметры: см. FPbase.scale_targets
+        '''
+
         if not self.is_regression_target(target_name):
             return targets
+        
         return self.__scalers[target_name].inverse_transform(pd.DataFrame(targets))
     
     def to_dataframe(self) -> pd.DataFrame:
+
+        '''
+        Преобразовывает датасет в датафрейм
+        '''
+
         return self.__dataset
     
     def to_train_dataframe(self, is_scaled: bool = True) -> pd.DataFrame:
@@ -159,8 +192,10 @@ class FPbase:
         Параметр is_scaled отвечает за масштабирование таргетов
         '''
         
+        # Обработанный датафрейм
         processed_df = self.__df_test.copy().reset_index(drop=True)
 
+        # Масштабирование таргетов если нужно
         if is_scaled:
             for target in self.targets:
                 if self.is_regression_target(target):
@@ -169,9 +204,17 @@ class FPbase:
         return processed_df
     
     def is_regression_target(self, target_name: str) -> bool:
-        '''Проверяем, является ли свойство регрессионным'''
+
+        '''
+        Проверяем, является ли свойство регрессионным
+        '''
+
         return target_name in self.regression_targets
     
     def is_classification_target(self, target_name: str) -> bool:
-        '''Проверяем, является ли свойство классифицируемым'''
+
+        '''
+        Проверяем, является ли свойство классифицируемым
+        '''
+
         return target_name in self.classification_targets

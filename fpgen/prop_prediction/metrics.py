@@ -40,15 +40,37 @@ CLASSIFICATION_METRIC_NAMES: Dict[str, Callable] = {
     'f1': lambda y_true, y_pred: f1_score(y_true, y_pred, average='weighted', zero_division=0)
 }
 
-# --- Функция для подсчета метрик ---
+# --- Функции для подсчета метрик ---
 
 def get_regression_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[str, float]:
+
+    '''
+    Считает метрики регрессии
+
+    Параметры:
+        y_pred, y_true (np.ndarray): метки, которые необходимо предсказать
+
+    Возвращает:
+        metrics (dict{str: float}): словарь с метриками
+    '''
+
     return {
         metric_name: metric_fn(y_true, y_pred)
         for metric_name, metric_fn in REGRESSION_METRIC_NAMES.items()
     }
 
 def get_classification_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[str, float]:
+
+    '''
+    Считает метрики классификации
+
+    Параметры:
+        y_pred, y_true (np.ndarray): метки, которые необходимо предсказать
+
+    Возвращает:
+        metrics (dict{str: float}): словарь с метриками
+    '''
+
     return {
         metric_name: metric_fn(y_true, y_pred)
         for metric_name, metric_fn in CLASSIFICATION_METRIC_NAMES.items()
