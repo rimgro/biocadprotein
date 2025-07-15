@@ -77,6 +77,43 @@ print(metric)
   <img src="img/property_prediction.png" width=600px>
 </div>
 
+<br>
+
+Результаты: качество предсказания длины волны испускания (λ<sub>em_max</sub>)
+
+Условия тестирования:
+- Датасет: [FPbase](https://www.fpbase.org/)
+- Тестовая выборка: 20%
+
+<br>
+
+<div align="center">
+
+<table>
+  <thead>
+    <tr>
+      <th>Модель</th>
+      <th>RMSE, нм ↓</th>
+      <th>MAE, нм ↓</th>
+      <th>R² ↑</th>
+      <th>MAE (med.), нм ↓</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>kNN (seq identity)</td><td>33.9</td><td><b>15.9</b></td><td>0.69</td><td><b>2.0</b></td></tr>
+    <tr><td>ESM C + kNN</td><td>37.3</td><td>23.5</td><td>0.62</td><td>13.4</td></tr>
+    <tr><td>CNN</td><td>33.9</td><td>22.2</td><td>0.70</td><td>14.8</td></tr>
+    <tr><td>ESM C + CNN</td><td><b>30.9</b></td><td>21.4</td><td>0.74</td><td>14.3</td></tr>
+    <tr><td>LSTM</td><td>31.9</td><td>19.4</td><td><b>0.75</b></td><td>10.4</td></tr>
+    <tr><td>ESM C + LSTM</td><td>39.8</td><td>30.2</td><td>0.55</td><td>18.5</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<br>
+
+
 ```python
 from fpgen.prop_prediction.predictor import PropertiesPredictor
 

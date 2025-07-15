@@ -1,7 +1,7 @@
 # =============================================================================
 # utils.py
 # =============================================================================
-# Дополнительные утилиты
+# Дополнительные утилиты (в основном для работы с PDB файлами и белками)
 #
 # Часть проекта с проектной смены "Большие Вызовы"
 # Лицензия: MIT (см. LICENSE)
@@ -15,6 +15,8 @@ from openmm import Platform
 import MDAnalysis as mda
 
 from esm.sdk.api import ESMProtein
+
+# --- Вспомогательные функции ---
 
 def fix_protein(
         protein: ESMProtein | None = None,
@@ -88,3 +90,54 @@ def get_active_site_residues(
     
     return list(sorted(residues))
 
+def pdb_to_uni_mol(input_filename: str) -> dict:
+
+    '''
+    Преобразовывает PDB в формат для модели Uni-Mol
+    
+    Параметры:
+        filename (str): путь к PDB файлу
+
+    Пример:
+        >>> from fpgen.utils import pdb_to_uni_mol
+        >>> data = pdb_to_uni_mol('structure.pdb')
+
+    Пример возвращаемого словаря:
+        {
+            'atoms': [['C', 'C'], ['C', 'H', 'O']],
+            'coordinates': [
+                [(10.0, 10.0, 10.0), (11.0, 10.0, 10.0)],
+                [(20.0, 20.0, 20.0), (21.0, 20.0, 20.0), (20.0, 21.0, 20.0)]
+            ]
+        }
+    '''
+
+    with open(input_filename) as f:
+        pdb_lines = f.readlines()
+
+    result = {'atoms': [], 'coordinates': []}
+    molecules = {}
+
+    for line in pdb_lines:
+        if line.startswith("ATOM") or line.startswith("HETATM"):
+            # Элемент
+            atom_type = line[76:78].strip()  
+            x = float(line[30:38])
+            y = float(line[38:46])
+            z = float(line[46:54])
+            
+            # Номер молекулы
+            residue_id = int(line[22:26])
+
+            if residue_id not in molecules:
+                molecules[residue_id] = {'atoms': [], 'coordinates': []}
+
+            molecules[residue_id]['atoms'].append(atom_type)
+            molecules[residue_id]['coordinates'].append((x, y, z))
+
+    # Преобразуем в нужный формат
+    for mol in sorted(molecules):
+        result['atoms'].append(molecules[mol]['atoms'])
+        result['coordinates'].append(molecules[mol]['coordinates'])
+
+    return result
