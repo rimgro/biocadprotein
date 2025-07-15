@@ -35,9 +35,8 @@ Homepage = "https://github.com/rimgro/biocadprotein/"
 Repository = "https://github.com/rimgro/biocadprotein"
 "Bug Tracker" = "https://github.com/rimgro/biocadprotein/issues"
 
-[tool.setuptools]
-packages = ["fpgen"]
-package-dir = {"" = "."}
+[tool.setuptools.packages.find]
+where = ["."]
 
 [tool.setuptools.package-data]
 "fpgen" = ["*.py", "*.txt", "*.md", "*.csv", "data/*.csv", "*.json"]
