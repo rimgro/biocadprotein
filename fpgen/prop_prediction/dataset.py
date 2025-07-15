@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 
 # Путь к датасету по умолчанию
 DEFAULT_DATASET_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'dataset.csv')
+    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'fpbase.csv')
 )
 
 # --- Основной класс ---
@@ -165,6 +165,9 @@ class FPbase:
 
         '''
         Преобразовывает датасет в датафрейм
+
+        Возвращает:
+            pd.Dataframe
         '''
 
         return self.__dataset
@@ -176,8 +179,10 @@ class FPbase:
         Параметр is_scaled отвечает за масштабирование таргетов
         '''
 
+        # Обработанный датафрейм
         processed_df = self.__df_train.copy().reset_index(drop=True)
-
+        
+        # Масштабирование таргетов если нужно
         if is_scaled:
             for target in self.targets:
                 if self.is_regression_target(target):

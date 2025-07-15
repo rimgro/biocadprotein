@@ -21,6 +21,11 @@ def get_masked_protein(
 
     '''
     Маскирует белок
+
+    Параметры:
+        protein (ESMProtein): белок
+        unmasked_indices (list[int]): индексы аминокислот, которые не будут маскироваться
+        model (ESM3InferenceClient): модель ESM3, для которой нужно произвести подготовку данных
     '''
     
     with torch.no_grad():

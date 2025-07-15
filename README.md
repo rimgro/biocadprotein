@@ -85,8 +85,6 @@ print(metric)
 - Датасет: [FPbase](https://www.fpbase.org/)
 - Тестовая выборка: 20%
 
-<br>
-
 <div align="center">
 
 <table>
@@ -110,8 +108,6 @@ print(metric)
 </table>
 
 </div>
-
-<br>
 
 
 ```python

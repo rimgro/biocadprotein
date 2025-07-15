@@ -27,15 +27,23 @@ def fix_protein(
 
     '''
     Исправляет белок, добавляет полноатомную структуру
+
+    Параметры:
+        protein (ESMProtein) или input_filename (str): белок или путь к PDB файлу белка
+        output_filename (str), опц.: имя выходного временного PDB файла
+        platform (str), опц.: CPU или CUDA
     '''
 
+    # Путь для сохранения временного PDB файла
     root_dir = os.getcwd()
     output_path = os.path.join(root_dir, output_filename)
 
+    # Если передан белок, а не input_filename, то сохранение в формате PDB
     if protein is not None:
         protein.to_pdb(output_path)
         input_filename = output_path
 
+    # Исправление PDB
     platform = Platform.getPlatformByName(platform)
     fixer = PDBFixer(filename=input_filename, platform=platform)
     fixer.findMissingResidues()
@@ -65,7 +73,7 @@ def get_active_site_residues(
         output_filename (str), опц.: имя выходного временного PDB файла
         radius (float), опц.: расстояние от активного центра, до которого считается поддерживающей оболочкой (в ангстремах)
 
-    Возвращаемое значение:
+    Возвращает:
         Список из индексов (нумерация с 0) аминокислот, которые считаются поддерживающим центром
     '''
 
@@ -96,11 +104,14 @@ def pdb_to_uni_mol(input_filename: str) -> dict:
     Преобразовывает PDB в формат для модели Uni-Mol
     
     Параметры:
-        filename (str): путь к PDB файлу
+        input_filename (str): путь к PDB файлу
 
     Пример:
         >>> from fpgen.utils import pdb_to_uni_mol
         >>> data = pdb_to_uni_mol('structure.pdb')
+
+    Возвращает:
+        Словарь для подачи в модель Uni Mol
 
     Пример возвращаемого словаря:
         {

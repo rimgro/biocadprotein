@@ -218,3 +218,4 @@ sequence.pickle
 /artem/
 /data/sequence.pickle
 *.pth
+pdb_structures/

@@ -3,9 +3,9 @@
 Используемые в обучении модели данные
 
 ## Файлы
-- ```fpbase.json```: база данных FPbase в формате JSON
-- ```dataset.csv```: преобразованная в CSV таблицу база данных FPbase
-- ```dataset_embedd.csv```: база данных FPbase с последовательностями, преобразованными в эмбеддинги при помощи `ESM C`
+- ```fpbase.json```: база данных [FPbase](https://www.fpbase.org/) в формате JSON
+- ```fpbase.csv```: преобразованная в CSV таблицу база данных FPbase
+- ```fpbase_embedd.csv```: база данных FPbase с последовательностями, преобразованными в эмбеддинги при помощи [ESM C](https://github.com/evolutionaryscale/esm)
 
 | Sequence                      | Brightness | Em_max (nm) | Ex_max (nm) | Ext_coeff | Lifetime | Maturation | pKa | Stokes_shift (nm) | QY     | Agg  |
 |-------------------------------|------------|------------|------------|-----------|----------|------------|-----|-------------------|--------|------|
