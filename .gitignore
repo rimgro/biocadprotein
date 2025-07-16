@@ -219,3 +219,4 @@ sequence.pickle
 /data/sequence.pickle
 *.pth
 pdb_structures/
+pdb_active_structures/
