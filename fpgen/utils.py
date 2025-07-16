@@ -94,7 +94,23 @@ def get_active_site_residues(
     # Выбор поддерживающего центра на расстоянии radius
     selection = uni.select_atoms(f'around {radius} resid {start}-{end}')
     # Объединение с активным центром, перевод в 0-base
-    residues = list(set(selection.residues.resids - 1)) + list(range(start - 1, end))
+    residues = list(set(selection.residues.resids)) + list(range(start, end + 1))
+
+    # В PDB файле некоторые аминокислоты могут отсутствовать
+    # Например: 74, 75, _, _, 78. Тогда индексация может нарушиться
+    valid_residue_indices = []
+    sequence_index = 0
+    for residue in uni.select_atoms('protein').residues:
+        # Если есть CA атом — считаем, что аминокислота есть
+        if any(atom.name == 'CA' for atom in residue.atoms):
+            valid_residue_indices.append((residue.resid, sequence_index))
+            sequence_index += 1
+        else:
+            continue
+
+    # Создаём соответствие: resid -> индекс в protein.sequence
+    residue_map = dict(valid_residue_indices)
+    residues = [residue_map[i] for i in residues if i in residue_map]
     
     return list(sorted(residues))
 
