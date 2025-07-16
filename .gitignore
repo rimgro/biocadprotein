@@ -218,6 +218,9 @@ sequence.pickle
 /artem/
 /data/sequence.pickle
 *.pth
+pdb_structures/
+/nontrack/
+/weights/
 /data/archive/
 pdb_structures/
 pdb_active_structures/
