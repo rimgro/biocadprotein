@@ -6,6 +6,7 @@
 #
 # Часть проекта с проектной смены "Большие Вызовы"
 #
+# Авторы: Никита Бакутов, Рим Громов
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
@@ -76,7 +77,7 @@ def get_classification_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[s
         for metric_name, metric_fn in CLASSIFICATION_METRIC_NAMES.items()
     }
 
-# --- Bootstrap confidence intervals ---
+# --- Доверительные интервалы с помощью бутстрепа ---
 
 def bootstrap_metric_ci(
     y_pred: np.ndarray,
@@ -86,34 +87,41 @@ def bootstrap_metric_ci(
     alpha: float = 0.05,
     random_state: int | None = None,
 ) -> tuple[float, float, float] | Dict[str, tuple[float, float, float]]:
-    """Calculate bootstrap confidence intervals for *one or several* metrics.
+    
+    '''
+    Вычисляет доверительные интервалы с помощью бутстрепа для одной или нескольких метрик.
 
-    The callable ``metric_fn`` can return either a single scalar metric **or**
-    a dictionary of metrics (e.g. the output of :pyfunc:`get_regression_metrics`).
+    Функция metric_fn может возвращать как скалярное значение метрики, так и 
+    словарь метрик (например, результат работы get_regression_metrics).
 
-    If a scalar is returned, the function behaves exactly as before and returns
-    ``(estimate, ci_low, ci_high)``.
+    Если возвращается скаляр, функция возвращает кортеж (оценка, нижняя_граница_ci, верхняя_граница_ci).
 
-    If a ``dict`` is returned, the function returns a *dict* that maps each
-    metric name to its corresponding ``(estimate, ci_low, ci_high)`` tuple.
-    """
+    Если возвращается словарь, функция возвращает словарь, где каждой метрике
+    соответствует кортеж (оценка, нижняя_граница_ci, верхняя_граница_ci).
+
+    Параметры:
+        y_pred, y_true (np.ndarray): предсказанные и истинные метки
+        metric_fn (Callable): функция для вычисления метрик
+        n_bootstrap (int): количество бутстреп-выборок
+        alpha (float): уровень значимости
+        random_state (int | None): seed для генератора случайных чисел
+
+    Возвращает:
+        Кортеж или словарь с оценкой метрики и границами доверительного интервала
+    '''
 
     if y_pred.shape[0] != y_true.shape[0]:
-        raise ValueError("y_pred and y_true must be the same length")
+        raise ValueError("y_pred и y_true должны иметь одинаковую длину")
 
     rng = np.random.default_rng(seed=random_state)
     n_samples = y_true.shape[0]
 
-    # Compute point estimate on the full data
-    # Please note : get_*_metrics expect (y_pred, y_true) order, so we use the
-    # same order here for consistency with those helpers.  Custom metric
-    # functions that follow the standard (y_true, y_pred) can be easily wrapped
-    # in a lambda if needed.
+    # Вычисление точечной оценки на полных данных
     point_estimate = metric_fn(y_pred, y_true)
 
-    # --- Case 1: metric_fn returns a dict of metrics ---
+    # --- Случай 1: metric_fn возвращает словарь метрик ---
     if isinstance(point_estimate, dict):
-        # Prepare storage for bootstrap values per metric key
+        # Подготовка массива для хранения бутстреп-значений
         boot_metrics: Dict[str, np.ndarray] = {
             k: np.empty(n_bootstrap, dtype=float) for k in point_estimate.keys()
         }
@@ -124,7 +132,7 @@ def bootstrap_metric_ci(
             for k, v in boot_estimate_i.items():
                 boot_metrics[k][i] = v
 
-        # Assemble CI for each metric
+        # Формирование доверительных интервалов для каждой метрики
         results: Dict[str, tuple[float, float, float]] = {}
         for k, arr in boot_metrics.items():
             ci_low = np.percentile(arr, 100 * alpha / 2)
@@ -133,7 +141,7 @@ def bootstrap_metric_ci(
 
         return results
 
-    # --- Case 2: metric_fn returns a scalar ---
+    # --- Случай 2: metric_fn возвращает скаляр ---
     boot_metrics = np.empty(n_bootstrap, dtype=float)
     for i in range(n_bootstrap):
         indices = rng.integers(0, n_samples, n_samples)
@@ -152,11 +160,23 @@ def get_regression_metrics_ci(
     alpha: float = 0.05,
     random_state: int | None = None,
 ) -> Dict[str, tuple[float, float, float]]:
-    """Return regression metrics and their confidence intervals.
+    
+    '''
+    Возвращает метрики регрессии с их доверительными интервалами.
 
-    The output is a dictionary mapping metric names to a tuple
-    ``(point_estimate, ci_low, ci_high)``.
-    """
+    Возвращает словарь, где каждой метрике соответствует кортеж
+    (точечная_оценка, нижняя_граница_ci, верхняя_граница_ci).
+
+    Параметры:
+        y_pred, y_true (np.ndarray): предсказанные и истинные метки
+        n_bootstrap (int): количество бутстреп-выборок
+        alpha (float): уровень значимости
+        random_state (int | None): seed для генератора случайных чисел
+
+    Возвращает:
+        Словарь с метриками и их доверительными интервалами
+    '''
+
     return {
         name: bootstrap_metric_ci(
             y_pred,
@@ -177,11 +197,23 @@ def get_classification_metrics_ci(
     alpha: float = 0.05,
     random_state: int | None = None,
 ) -> Dict[str, tuple[float, float, float]]:
-    """Return classification metrics and their confidence intervals.
+    
+    '''
+    Возвращает метрики классификации с их доверительными интервалами.
 
-    The output is a dictionary mapping metric names to a tuple
-    ``(point_estimate, ci_low, ci_high)``.
-    """
+    Возвращает словарь, где каждой метрике соответствует кортеж
+    (точечная_оценка, нижняя_граница_ci, верхняя_граница_ci).
+
+    Параметры:
+        y_pred, y_true (np.ndarray): предсказанные и истинные метки
+        n_bootstrap (int): количество бутстреп-выборок
+        alpha (float): уровень значимости
+        random_state (int | None): seed для генератора случайных чисел
+
+    Возвращает:
+        Словарь с метриками и их доверительными интервалами
+    '''
+
     return {
         name: bootstrap_metric_ci(
             y_pred,
