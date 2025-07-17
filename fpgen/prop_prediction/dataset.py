@@ -45,6 +45,7 @@ class FPbase:
             self,
             dataset_path: str | None = None,
             preprocess_function: Callable | None = None,
+            feature_column: str = 'sequence',
             random_state: int = 52
         ) -> None:
         if dataset_path is None:
@@ -54,8 +55,8 @@ class FPbase:
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
 
         # Публичные поля
-        self.targets: list = list(self.__dataset.columns)[1:]
-        self.feature: str = self.__dataset.columns[0]
+        self.targets: list = list(self.__dataset.drop(columns=[feature_column]).columns)
+        self.feature: str = feature_column
 
         self.regression_targets = []
         self.classification_targets = []
