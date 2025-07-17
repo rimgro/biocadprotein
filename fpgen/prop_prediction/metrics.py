@@ -4,7 +4,7 @@
 # Метрики качества для предсказания свойств белков.
 # Включает метрики для классификации и регрессии
 #
-# Часть проекта с проектной смены "Большие Вызовы"
+# Часть проекта с проектной смены 'Большие Вызовы'
 #
 # Авторы: Никита Бакутов, Рим Громов
 # Лицензия: MIT (см. LICENSE)
@@ -55,6 +55,12 @@ def get_regression_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[str, 
         metrics (dict{str: float}): словарь с метриками
     '''
 
+    if not len(y_pred) or not len(y_true):
+        raise ValueError('Предсказанные и истинные метрики не должны быть пустыми')
+    
+    if len(y_pred) != len(y_true):
+        raise ValueError('y_pred и y_true должны иметь одинаковую длину')
+
     return {
         metric_name: metric_fn(y_true, y_pred)
         for metric_name, metric_fn in REGRESSION_METRIC_NAMES.items()
@@ -71,6 +77,12 @@ def get_classification_metrics(y_pred: np.ndarray, y_true: np.ndarray) -> Dict[s
     Возвращает:
         metrics (dict{str: float}): словарь с метриками
     '''
+
+    if not len(y_pred) or not len(y_true):
+        raise ValueError('Предсказанные и истинные метрики не должны быть пустыми')
+    
+    if len(y_pred) != len(y_true):
+        raise ValueError('y_pred и y_true должны иметь одинаковую длину')
 
     return {
         metric_name: metric_fn(y_true, y_pred)
@@ -110,8 +122,11 @@ def bootstrap_metric_ci(
         Кортеж или словарь с оценкой метрики и границами доверительного интервала
     '''
 
+    if not len(y_pred) or not len(y_true):
+        raise ValueError('Предсказанные и истинные метрики не должны быть пустыми')
+
     if y_pred.shape[0] != y_true.shape[0]:
-        raise ValueError("y_pred и y_true должны иметь одинаковую длину")
+        raise ValueError('y_pred и y_true должны иметь одинаковую длину')
 
     rng = np.random.default_rng(seed=random_state)
     n_samples = y_true.shape[0]
