@@ -146,6 +146,36 @@ class FPbase:
         '''
 
         return self.__preprocess_dataframe(self.__df_test, target_name, is_scaled, additional_feature_columns)
+    
+    def get_train_val(
+            self,
+            target_name: str,
+            val_size: float = 0.2,
+            is_scaled: bool = True,
+            additional_feature_columns: list[str] = [],
+            random_state: int = 52
+        ) -> Tuple[Tuple[pd.Series, pd.Series], Tuple[pd.Series, pd.Series]]:
+
+        '''
+        Возвращает (x_train, y_train) и (x_val, y_val) для переданного свойства из тренировочной выборки
+
+        Парметры:
+            val_size (float), опц.: размер валидационной выборки
+            random_state (int), опц.: сид для рандомного разбиения
+            см. FPbase.__preprocess_dataframe
+
+        Примеры:
+            >>> (x_train, y_train), (x_val, y_val) = dataset.get_train_val('em_max', 0.2)
+        '''
+
+        x, y = self.get_train(target_name, is_scaled, additional_feature_columns)
+
+        # Разбиение данных на train и val
+        x_train, x_val, y_train, y_val = train_test_split(
+            x, y, test_size=val_size, random_state=random_state
+        )
+
+        return (x_train, y_train), (x_val, y_val)
 
     def scale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
 
