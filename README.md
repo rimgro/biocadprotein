@@ -5,36 +5,38 @@
 </p>
 
 <p align="center">
-  <a href="https://your-tilda-site.tilda.ws/">
-    <img src="https://img.shields.io/badge/Tilda_Page-Open%20Website-000000?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Tilda Page">
+  <a href="https://fluorescentprotein-bv2025.tilda.ws/page72379799.html">
+    <img src="https://img.shields.io/badge/Tilda-Листинг-000000?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Tilda Page">
   </a>
 </p>
 
 <div align="center">
-<table>
-  <tr>
-    <td width="100%" align="center">
-      <h3>Наши партнеры</h3>
-      
-      <a href="https://www.prisma.io/">
-        <img src="img/bv_logo.png" width="240" style="display: block; margin: 0 auto;">
-        <p style="text-align: center; font-size: 0.9em;">
-          Next-generation Node.js and TypeScript ORM with an intuitive data model, automated migrations, type-safety & auto-completion.
-        </p>
-      </a>
-      
-      <div style="margin: 20px 0;"></div>
-      
-      <a href="https://www.prisma.io/">
-        <img src="img/biocad_logo.png" width="240" style="display: block; margin: 0 auto;">
-        <p style="text-align: center; font-size: 0.9em;">
-          Next-generation Node.js and TypeScript ORM with an intuitive data model, automated migrations, type-safety & auto-completion.
-        </p>
-      </a>
-    </td>
-  </tr>
-</table>
+
+<table><tr><td width="550"><div align="center">
+  <p><sup>Партнеры</sup></p>
+
+  <p><a href="https://konkurs.sochisirius.ru/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)">
+      <img width="250" alt="Prisma.io" src="img/bv_logo.png">
+    </picture>
+    <br>
+    <br><sup>Научно-технологическая программы, реализующаяся в Образовательном центре «Сириус»</sup>
+  </a></p>
+
+  <p><a href="https://biocad.ru/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)">
+      <img width="250" alt="Frappe" src="img/biocad_logo.png">
+    </picture>
+    <br>
+    <br><sup>Одна из крупнейших биотехнологических инновационных компаний в России</sup>
+  </a></p>
+
+</div></td></tr></table>
+
 </div>
+
 
 ## Установка
 Установите библиотеку через ```pip install```:
