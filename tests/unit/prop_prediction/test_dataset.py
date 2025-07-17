@@ -10,7 +10,7 @@ def dataset():
 def test_fpbase_initialization(dataset):
     assert dataset.feature == 'sequence'
 
-    targets = ['brightness', 'em_max', 'ex_max', 'ext_coeff', 'lifetime', 'maturation', 'pka', 'stokes_shift', 'qy', 'agg', 'switch_type']
+    targets = ['brightness', 'em_max', 'ex_max', 'ext_coeff', 'lifetime', 'maturation', 'pka', 'stokes_shift', 'qy', 'agg', 'switch_type', 'id']
     assert list(sorted(dataset.targets)) == list(sorted(targets))
 
     x, y = dataset.get_train('ex_max')
