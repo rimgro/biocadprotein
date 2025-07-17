@@ -20,7 +20,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img width="250" alt="Prisma.io" src="img/bv_logo.png">
     </picture>
-    <br><sup>Научно-технологическая программы, реализующаяся<br>в Образовательном центре «Сириус»</sup>
+    <br><br><sup>Научно-технологическая программы, реализующаяся<br>в Образовательном центре «Сириус»</sup>
   </a></p>
 
   <p><a href="https://biocad.ru/">
@@ -28,7 +28,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img width="250" alt="Frappe" src="img/biocad_logo.png">
     </picture>
-    <br><sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
+    <br><br><sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
   </a></p>
 
 </div></td></tr></table>
