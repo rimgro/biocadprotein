@@ -13,8 +13,9 @@
 <div align="center">
 
 <table><tr><td width="550"><div align="center">
-  <p><sup>Партнеры</sup></p>
-
+  <h3>Партнеры</h3>
+  <br>
+  
   <p><a href="https://konkurs.sochisirius.ru/">
     <picture>
       <source media="(prefers-color-scheme: dark)">
@@ -22,6 +23,8 @@
     </picture>
     <br><br><sup>Научно-технологическая программы, реализующаяся<br>в Образовательном центре «Сириус»</sup>
   </a></p>
+
+  <br>
 
   <p><a href="https://biocad.ru/">
     <picture>
