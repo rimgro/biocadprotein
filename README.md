@@ -79,11 +79,13 @@ print(metric)
 
 <br>
 
-Результаты: качество предсказания длины волны испускания (λ<sub>em_max</sub>)
-
 Условия тестирования:
 - Датасет: [FPbase](https://www.fpbase.org/)
 - Тестовая выборка: 20%
+
+### Предсказание по аминокислотной последовательности
+
+Результаты: качество предсказания длины волны испускания (λ<sub>em_max</sub>)
 
 <div align="center">
 
@@ -108,6 +110,14 @@ print(metric)
 </table>
 
 </div>
+
+### Предсказание по структуре
+
+В рамках проекта был создан датасет с предсказанными на основе последовательностей из FPbase структурами белков с помощью модели [ESMfold](https://github.com/mingkangyang/esmfold)
+
+<p align="center"><a href="https://www.kaggle.com/datasets/nikitabakutov/fpbase-structures">
+  <img src="https://img.shields.io/badge/Kaggle_Dataset-FPbase structures-20BEFF?style=for-the-badge&logo=databricks&logoColor=white" alt="Dataset">
+</a></p>
 
 
 ```python
