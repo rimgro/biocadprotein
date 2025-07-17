@@ -89,7 +89,8 @@ class FPbase:
             self,
             dataframe: pd.DataFrame,
             target_name: str,
-            is_scaled: bool = True
+            is_scaled: bool = True,
+            additional_feature_columns: list[str] = []
         ) -> Tuple[pd.Series, pd.Series]:
 
         '''
@@ -100,9 +101,10 @@ class FPbase:
             is_scaled (bool), опц.: нужно ли масштабировать таргеты
         '''
 
-        # Обработанный датасет
-        processed_dataset: pd.DataFrame = dataframe[[self.feature, target_name]].dropna() \
-                                                                                .reset_index(drop=True)
+        # Обработанный датасет 
+        feature_columns = [self.feature] + additional_feature_columns
+        processed_dataset: pd.DataFrame = dataframe[feature_columns + [target_name]].dropna() \
+                                                                                    .reset_index(drop=True)
 
         # Масштабирование признаков
         if is_scaled:
@@ -111,28 +113,38 @@ class FPbase:
             )
 
         # Получение пар (x, y)
-        x = processed_dataset[self.feature]
+        x = processed_dataset[feature_columns] if additional_feature_columns else processed_dataset[self.feature]
         y = processed_dataset[target_name].values
 
         return x, y
 
-    def get_train(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
+    def get_train(
+            self,
+            target_name: str,
+            is_scaled: bool = True,
+            additional_feature_columns: list[str] = []
+        ) -> Tuple[pd.Series, pd.Series]:
 
         '''
         Возвращает пары (x, y) для переданного свойства из тренировочной выборки
         Параметры: см. FPbase.__preprocess_dataframe
         '''
 
-        return self.__preprocess_dataframe(self.__df_train, target_name, is_scaled)
+        return self.__preprocess_dataframe(self.__df_train, target_name, is_scaled, additional_feature_columns)
 
-    def get_test(self, target_name: str, is_scaled: bool = True) -> Tuple[pd.Series, pd.Series]:
+    def get_test(
+            self,
+            target_name: str,
+            is_scaled: bool = True,
+            additional_feature_columns: list[str] = []
+        ) -> Tuple[pd.Series, pd.Series]:
 
         '''
         Возвращает пары (x, y) для переданного свойства из тестовой выборки
         Парметры: см. FPbase.__preprocess_dataframe
         '''
 
-        return self.__preprocess_dataframe(self.__df_test, target_name, is_scaled)
+        return self.__preprocess_dataframe(self.__df_test, target_name, is_scaled, additional_feature_columns)
 
     def scale_targets(self, targets: np.ndarray | pd.Series, target_name: str) -> np.ndarray | pd.Series:
 
