@@ -20,8 +20,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img width="250" alt="Prisma.io" src="img/bv_logo.png">
     </picture>
-    <br>
-    <br><sup>Научно-технологическая программы, реализующаяся в Образовательном центре «Сириус»</sup>
+    <br><sup>Научно-технологическая программы, реализующаяся<br>в Образовательном центре «Сириус»</sup>
   </a></p>
 
   <p><a href="https://biocad.ru/">
@@ -29,8 +28,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img width="250" alt="Frappe" src="img/biocad_logo.png">
     </picture>
-    <br>
-    <br><sup>Одна из крупнейших биотехнологических инновационных компаний в России</sup>
+    <br><sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
   </a></p>
 
 </div></td></tr></table>
@@ -157,6 +155,17 @@ predictor = PropertiesPredictor()
 properties = predictor.predict(generated_protein)
 
 print(properties)
+```
+
+## Полный пайплайн
+
+Использование полного пайплайна для генерации белков с заданными свойствами
+
+```python
+from fpgen.pipeline import Pipeline
+
+pipeline = Pipeline(template_protein, aplha_phelix, model)
+result = pipeline.generate_proteins(n=300)
 ```
 
 ## Авторы
