@@ -2,40 +2,31 @@ import torch
 import pytest
 from unittest.mock import MagicMock
 from esm.sdk.api import ESMProtein
+from esm.utils.structure.protein_chain import ProteinChain
 from fpgen.generation.masking import get_masked_protein
+from esm.models.esm3 import ESM3
 
 @pytest.fixture
 def example_protein():
-    # Простая белковая последовательность для теста
-    return ESMProtein(sequence='ACDEFGHIKLMNPQRSTVWY')
+    # Белок для теста
+    return ESMProtein.from_protein_chain(ProteinChain.from_rcsb('1qy3', chain_id='A'))
 
 @pytest.fixture
-def mock_model():
-    mock = MagicMock()
+def model():
+    model = ESM3.from_pretrained('esm3-open').to('cuda')
+    return model
 
-    def encode(protein):
-        seq_len = len(protein.sequence)
-        fake_encoded = MagicMock()
-        fake_encoded.sequence = torch.zeros(seq_len + 2, dtype=torch.long)  # [CLS] + seq + [EOS]
-        fake_encoded.structure = torch.ones(seq_len + 2, dtype=torch.long) * 4096
-        return fake_encoded
+def test_get_masked_protein_length(example_protein, model):
+    unmasked = [1, 3, 5, 10, 20]
+    masked_protein = get_masked_protein(example_protein, unmasked, model)
 
-    mock.encode.side_effect = encode
-    return mock
-
-def test_get_masked_protein_length(example_protein, mock_model):
-    unmasked = [1, 3, 5]
-    masked_protein = get_masked_protein(example_protein, unmasked, mock_model)
-
-    assert isinstance(masked_protein, MagicMock)  # возвращается результат mock.encode
     assert masked_protein.structure.shape == masked_protein.sequence.shape
     assert len(masked_protein.sequence) == len(example_protein.sequence) + 2
 
-def test_structure_masking_behavior(example_protein, mock_model):
-    unmasked = [0, 2, 4]
-    result = get_masked_protein(example_protein, unmasked, mock_model)
+def test_structure_masking_behavior(example_protein, model):
+    unmasked = [1, 3, 5, 10, 20]
+    result = get_masked_protein(example_protein, unmasked, model)
 
-    print(result.sequence)
     # Проверим, что structure[1 + i] скопирован из protein_tokens.structure
     for i in range(len(example_protein.sequence)):
         token_value = result.structure[i + 1].item()

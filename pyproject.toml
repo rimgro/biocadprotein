@@ -6,11 +6,14 @@ build-backend = "setuptools.build_meta"
 name = "fpgen"
 version = "0.0.19"
 authors = [
-    {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"}
+    {name = "Nikita Bakutov", email = "nikitabakutov2008@gmail.com"},
+    {name = "Artem Podlegaev"},
+    {name = "Rim Gromov"},
+    {name = "Ilya Tyshchenko"}
 ]
 description = "Библиотека для работы с генерацией и предсказания свойств белковых молей"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = "==3.11.9"
 license = {text = "MIT"}
 
 classifiers = [
@@ -20,19 +23,19 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy>=1.21",
+    "numpy>=1.20",
     "torch>=1.10",
     "esm @ git+https://github.com/evolutionaryscale/esm.git",
     "pdbfixer @ git+https://github.com/openmm/pdbfixer.git@5a6c129fb5b508610542634eafa218fb0e0671fe",
-    "OpenMM==8.3.0",
-    "httpx>=0.28.1",
-    "py3Dmol>=2.5.1",
+    "OpenMM==8.2",
+    "httpx>=0.28.0",
+    "py3Dmol>=2.5.0",
     "MDAnalysis>=2.9.0",
     "scikit-learn>=1.7.0"
 ]
 
 [project.urls]
-Homepage = "https://github.com/rimgro/biocadprotein/"
+Homepage = "https://fluorescentprotein-bv2025.tilda.ws/page72379799.html"
 Repository = "https://github.com/rimgro/biocadprotein"
 "Bug Tracker" = "https://github.com/rimgro/biocadprotein/issues"
 
