@@ -10,56 +10,43 @@
   </a>
 </p>
 
-<table><tr><td width="550"><div align="center">
-  <h3>Зависимости</h3>
-  <p align="center">
-      <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-      <img alt="NumPy" src="https://img.shields.io/badge/numpy-013243?style=for-the-badge&logo=numpy&logoColor=white"/>
-      <img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
-      <img alt="ESM" src="https://img.shields.io/badge/ESM-black?style=for-the-badge"/>
-      <img alt="PDBFixer" src="https://img.shields.io/badge/PDBFixer-00599C?style=for-the-badge"/>
-      <img alt="OpenMM" src="https://img.shields.io/badge/OpenMM-FF6F00?style=for-the-badge"/>
-      <img alt="py3Dmol" src="https://img.shields.io/badge/py3Dmol-20B2AA?style=for-the-badge"/>
-      <img alt="MDAnalysis" src="https://img.shields.io/badge/MDAnalysis-8A2BE2?style=for-the-badge"/>
-      <img alt="scikit-learn" src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white"/>
-  </p>
-</div></td></tr></table>
-
 <div align="center">
-<table>
-  <tr>
-    <td>
-      <div align="center">
-        <h3>Партнеры</h3>
-        <br>
-        <table>
-          <tr>
-            <td align="center">
-              <a href="https://konkurs.sochisirius.ru/">
-                <picture>
-                  <source media="(prefers-color-scheme: dark)">
-                  <img width="250" alt="Большие вызовы" src="img/bv_logo.png">
-                </picture>
-                <br><br>
-                <sup>Научно-технологическая программа, реализующаяся<br>в Образовательном центре «Сириус»</sup>
-              </a>
-            </td>
-            <td align="center">
-              <a href="https://biocad.ru/">
-                <picture>
-                  <source media="(prefers-color-scheme: dark)">
-                  <img width="250" alt="Биокад" src="img/biocad_logo.png">
-                </picture>
-                <br><br>
-                <sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </td>
-  </tr>
-</table>
+<table><tr><td width="550"><div align="center">
+    <h3>Зависимости</h3>
+    <p align="center">
+        <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+        <img alt="NumPy" src="https://img.shields.io/badge/numpy-013243?style=for-the-badge&logo=numpy&logoColor=white"/>
+        <img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
+        <img alt="ESM" src="https://img.shields.io/badge/ESM-black?style=for-the-badge"/>
+        <img alt="PDBFixer" src="https://img.shields.io/badge/PDBFixer-00599C?style=for-the-badge"/>
+        <img alt="OpenMM" src="https://img.shields.io/badge/OpenMM-FF6F00?style=for-the-badge"/>
+        <img alt="py3Dmol" src="https://img.shields.io/badge/py3Dmol-20B2AA?style=for-the-badge"/>
+        <img alt="MDAnalysis" src="https://img.shields.io/badge/MDAnalysis-8A2BE2?style=for-the-badge"/>
+        <img alt="scikit-learn" src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white"/>
+    </p>
+
+  <h3>Партнеры</h3>
+  <br>
+  
+  <p><a href="https://konkurs.sochisirius.ru/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)">
+      <img width="250" alt="Prisma.io" src="img/bv_logo.png">
+    </picture>
+    <br><br><sup>Научно-технологическая программы, реализующаяся<br>в Образовательном центре «Сириус»</sup>
+  </a></p>
+
+  <br>
+
+  <p><a href="https://biocad.ru/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)">
+      <img width="250" alt="Frappe" src="img/biocad_logo.png">
+    </picture>
+    <br><br><sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
+  </a></p>
+
+</div></td></tr></table>
 </div>
 
 
