@@ -27,7 +27,8 @@ dependencies = [
     "OpenMM==8.3.0",
     "httpx>=0.28.1",
     "py3Dmol>=2.5.1",
-    "MDAnalysis>=2.9.0"
+    "MDAnalysis>=2.9.0",
+    "scikit-learn>=1.7.0"
 ]
 
 [project.urls]
