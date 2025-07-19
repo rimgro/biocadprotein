@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy>=2.0",
+    "numpy>=1.20",
     "torch>=1.10",
     "esm @ git+https://github.com/evolutionaryscale/esm.git",
     "pdbfixer @ git+https://github.com/openmm/pdbfixer.git@5a6c129fb5b508610542634eafa218fb0e0671fe",
@@ -31,7 +31,7 @@ dependencies = [
     "httpx>=0.28.0",
     "py3Dmol>=2.5.0",
     "MDAnalysis>=2.9.0",
-    "scikit-learn>=1.5.0"
+    "scikit-learn>=1.7.0"
 ]
 
 [project.urls]

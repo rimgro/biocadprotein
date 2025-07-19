@@ -76,6 +76,7 @@ class SequenceLSTM(nn.Module):
         self.layer_norm = nn.LayerNorm(hidden_dim * 2)
         
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        
         '''
         Прямой проход модели.
         
@@ -86,6 +87,7 @@ class SequenceLSTM(nn.Module):
         Возвращает:
             torch.Tensor: выходной тензор формы [batch_size, output_dim]
         '''
+
         # Проекция входных векторов
         x = F.relu(self.input_projection(x))
         
