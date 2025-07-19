@@ -11,7 +11,7 @@
 </p>
 
 <div align="center">
-<table><tr><td width="550"><div align="center">
+<table><tr><td width="600"><div align="center">
     <h3>Зависимости</h3>
     <p align="center">
         <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
@@ -41,7 +41,7 @@
   <p><a href="https://biocad.ru/">
     <picture>
       <source media="(prefers-color-scheme: dark)">
-      <img width="250" alt="Frappe" src="img/biocad_logo.png">
+      <img width="250" alt="Frappe" src="img/biocad_logo.jpg">
     </picture>
     <br><br><sup>Одна из крупнейших биотехнологических<br>инновационных компаний в России</sup>
   </a></p>

@@ -1,11 +1,12 @@
 # data
 
-Используемые в обучении модели данные
+Используемые данные для обучения модели предсказания свойств
 
 ## Файлы
 - ```fpbase.json```: база данных [FPbase](https://www.fpbase.org/) в формате JSON
 - ```fpbase.csv```: преобразованная в CSV таблицу база данных FPbase
 - ```fpbase_embedd.csv```: база данных FPbase с последовательностями, преобразованными в эмбеддинги при помощи [ESM C](https://github.com/evolutionaryscale/esm)
+- ```sequence_distance_matrix.csv```: матрица расстояний для каждой аминокислотной последовательности с каждой. Вычисляется на основе identity из [fpgen.generation.metrics](..\fpgen\generation\metrics.py)
 
 | Sequence                      | Brightness | Em_max (nm) | Ex_max (nm) | Ext_coeff | Lifetime | Maturation | pKa | Stokes_shift (nm) | QY     | Agg  |
 |-------------------------------|------------|------------|------------|-----------|----------|------------|-----|-------------------|--------|------|
