@@ -46,7 +46,8 @@ class FPbase:
             dataset_path: str | None = None,
             preprocess_function: Callable | None = None,
             feature_column: str = 'sequence',
-            random_state: int = 52
+            random_state: int = 52,
+            ignore_targets: list[str] = ['id']
         ) -> None:
         if dataset_path is None:
             dataset_path = DEFAULT_DATASET_PATH
@@ -55,7 +56,7 @@ class FPbase:
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
 
         # Публичные поля
-        self.targets: list = list(self.__dataset.drop(columns=[feature_column]).columns)
+        self.targets: list = list(self.__dataset.drop(columns=[feature_column] + ignore_targets).columns)
         self.feature: str = feature_column
 
         self.regression_targets = []

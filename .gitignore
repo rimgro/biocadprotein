@@ -216,6 +216,7 @@ a.ipynb
 best_cnn_model.pth
 sequence.pickle
 /artem/
+nikita/
 /data/sequence.pickle
 *.pth
 pdb_structures/

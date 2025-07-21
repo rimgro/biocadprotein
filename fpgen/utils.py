@@ -3,7 +3,7 @@
 # =============================================================================
 # Дополнительные утилиты (в основном для работы с PDB файлами и белками)
 #
-# Часть проекта с проектной смены "Большие Вызовы"
+# Часть проекта с проектной смены 'Большие Вызовы'
 # Лицензия: MIT (см. LICENSE)
 # =============================================================================
 
@@ -14,6 +14,9 @@ from pdbfixer import PDBFixer
 from openmm.app import PDBFile
 from openmm import Platform
 import MDAnalysis as mda
+
+import biotite.sequence as seq
+import biotite.sequence.align as align
 
 from esm.sdk.api import ESMProtein
 
@@ -57,8 +60,12 @@ def fix_protein(
 
     return fixed_protein
 
+# --- Функции для работы с активным центром ---
+
+import MDAnalysis as mda
+
 def get_active_site_residues(
-        target_residues: tuple,
+        target_residues: tuple[int, int],
         protein: ESMProtein | None = None,
         input_filename: str | None = None,
         output_filename: str = 'temp_protein.pdb',
@@ -66,51 +73,167 @@ def get_active_site_residues(
     ) -> list[int]:
     
     '''
-    Возвращает индексы аминокислот в радиусе 'radius' Å от 'target_residues'.
+    Возвращает индексы (0-based) аминокислот в радиусе 'radius' Å от остатков
+    с номерами от target_residues[0] до target_residues[1] (включительно).
 
     Параметры:
-        target_residues: от какого до какого индекса считать активным центром (нумерация от 1)
-        protein (ESMProtein) или input_filename (str): белок или путь к PDB файлу белка
-        output_filename (str), опц.: имя выходного временного PDB файла
-        radius (float), опц.: расстояние от активного центра, до которого считается поддерживающей оболочкой (в ангстремах)
+        target_residues: кортеж (start, end) номеров остатков (1-based)
+        protein: ESMProtein или None
+        input_filename: путь к PDB файлу или None
+        output_filename: временный PDB, если передан protein
+        radius: радиус поиска (Å)
 
     Возвращает:
-        Список из индексов (нумерация с 0) аминокислот, которые считаются поддерживающим центром
+        Отсортированный список 0-based индексов остатков, входящих в активную зону.
     '''
 
+    # Проверка входных аргументов
     if len(target_residues) != 2:
-        ValueError('target_residues должен содержать два числа: индекс начала и конца')
+        raise ValueError('target_residues должен содержать два числа: начало и конец (1-based)')
+    if not ((protein is None) ^ (input_filename is None)):
+        raise ValueError('Нужно передать либо protein, либо input_filename, но не оба одновременно')
 
-    if not ((protein is not None) ^ (input_filename is not None)):
-        ValueError('Необходимо передавать либо белок ESMProtein, либо путь к файлу .pdb')
-
-    # Чтение белка
     if protein is not None:
         protein.to_pdb(output_filename)
         input_filename = output_filename
 
     uni = mda.Universe(input_filename)
-
-    start, end = target_residues
-    # Выбор поддерживающего центра на расстоянии radius
-    selection = uni.select_atoms(f'around {radius} resid {start}-{end}')
-    # Объединение с активным центром, перевод в 0-base
-    residues = list(set(selection.residues.resids)) + list(range(start, end + 1))
-
-    # В PDB файле некоторые аминокислоты могут отсутствовать
-    # Например: 74, 75, _, _, 78. Тогда индексация может нарушиться
-    valid_residue_indices = []
-    sequence_index = 0
-    for residue in uni.select_atoms('protein').residues:
-        # Если есть CA атом — считаем, что аминокислота есть
-        if any(atom.name == 'CA' for atom in residue.atoms):
-            valid_residue_indices.append((residue.resid, sequence_index))
-            sequence_index += 1
-        else:
-            continue
-
-    # Создаём соответствие: resid -> индекс в protein.sequence
-    residue_map = dict(valid_residue_indices)
-    residues = [residue_map[i] for i in residues if i in residue_map]
     
-    return list(sorted(residues))
+    # 1) Собираем список всех остатков и строим маппинг:
+    all_res = uni.select_atoms('protein').residues
+    seq_to_pdb: dict[int, tuple[int, str]] = {}
+    for seq_idx, res in enumerate(all_res):
+        # вместо res.segments.segids[0] используем res.segid
+        seq_to_pdb[seq_idx] = (res.resid, res.segid)
+
+    # 2) Переводим 1-based → 0-based и корректируем порядок
+    start0 = target_residues[0] - 1
+    end0   = target_residues[1] - 1
+    if start0 > end0:
+        start0, end0 = end0, start0
+
+    # 3) Собираем множество (resid, chain) целевой области
+    target_pdb = {
+        seq_to_pdb[i]
+        for i in range(start0, end0 + 1)
+        if i in seq_to_pdb
+    }
+    if not target_pdb:
+        return []
+
+    # 4) Жёстко фиксируем поиск по первой из цепей
+    _, chain_id = next(iter(target_pdb))
+    sel_targets = uni.select_atoms(
+        "protein and segid {} and resid {}".format(
+            chain_id,
+            " ".join(str(r) for r, _ in target_pdb)
+        )
+    )
+
+    # 5) Находим «around radius» от целевой группы
+    sel_neighbors = uni.select_atoms(
+        f"around {radius} group targ", targ=sel_targets
+    )
+
+    # 6) Собираем все PDB‑номера соседних остатков и объединяем с целевыми
+    neighbor_resids = {res.resid for res in sel_neighbors.residues}
+    all_pdb = {r for r, _ in target_pdb} | neighbor_resids
+
+    # 7) Конвертируем обратно в 0‑based индексы ‑только той же цепи
+    result = sorted(
+        idx for idx, (r, ch) in seq_to_pdb.items()
+        if (r in all_pdb and ch == chain_id)
+    )
+    return result
+
+def get_align_alpha_phelix_idx(
+    aligned_seq: list[int],
+    idx: list[int],
+) -> list[int]:
+    
+    '''
+    Получает индексы альфа-спирали в выровненной последовательности.
+
+    Параметры:
+        aligned_seq (list[int]): выровненная последовательность, где -1 обозначает пропуски
+        idx (list[int]): индексы интересующих позиций в оригинальной последовательности
+
+    Возвращает:
+        list[int]: индексы соответствующих позиций в выровненной последовательности
+    '''
+
+    idx_set = set(idx)
+    result_map = {}
+    original_pos = 0  # считает только те символы/коды, которые != gap_val
+
+    for i, code in enumerate(aligned_seq):
+        if code == -1:
+            continue
+        if original_pos in idx_set:
+            result_map[original_pos] = i
+        original_pos += 1
+
+    # Собираем выходной список в том же порядке, что и входной,
+    # но пропускаем те, которых нет в result_map
+    return [result_map[i] for i in idx if i in result_map]
+
+def get_original_alpha_phelix_idx(aligned_seq: list[int], idx: list[int]) -> list[int]:
+
+    '''
+    Получает индексы альфа-спирали в оригинальной последовательности из выровненной.
+
+    Параметры:
+        aligned_seq (list[int]): выровненная последовательность, где -1 обозначает пропуски
+        idx (list[int]): индексы интересующих позиций в выровненной последовательности
+
+    Возвращает:
+        list[int]: индексы соответствующих позиций в оригинальной последовательности
+    '''
+
+    result = []
+    new_pos = 0  # позиция в строке без '_'
+
+    for i, elem in enumerate(aligned_seq):
+        if elem == -1:
+            continue
+        if i in idx:
+            result.append(new_pos)
+        new_pos += 1
+
+    return result
+
+def active_side_transfer(seq1: str, seq2: str, idx: list[int]) -> list[int]:
+
+    '''
+    Переносит индексы активного сайта с одной последовательности на другую через выравнивание.
+
+    Параметры:
+        seq1 (str): исходная аминокислотная последовательность (с активным сайтом)
+        seq2 (str): целевая аминокислотная последовательность
+        idx (list[int]): индексы активного сайта в seq1
+
+    Возвращает:
+        list[int]: индексы активного сайта в seq2, полученные через выравнивание последовательностей
+    '''
+
+    # Обертка в класс последовательности
+    seq1 = seq.ProteinSequence(seq1)
+    seq2 = seq.ProteinSequence(seq2)
+    
+    # Выравнивание
+    alignments = align.align_optimal(
+        seq1,
+        seq2,
+        align.SubstitutionMatrix.std_protein_matrix(),
+    )
+
+    alignment = alignments[0]
+
+    # Например, [[ 0, 20,  1, -1, -1, -1],
+    #            [ 0, 20,  1,  1,  1,  1]]
+    seq1_code, seq2_code = align.get_codes(alignment)
+
+    aligned_idx = get_align_alpha_phelix_idx(seq1_code, idx)
+    original_idx = get_original_alpha_phelix_idx(seq2_code, aligned_idx)
+
+    return original_idx
