@@ -1,0 +1,4 @@
+from fpgen.prop_prediction.models.embedding_cnn import EmbeddingCNN
+from fpgen.prop_prediction.models.embedding_lstm import EmbeddingLSTM
+from fpgen.prop_prediction.models.sequence_cnn import SequenceCNN
+from fpgen.prop_prediction.models.sequence_lstm import SequenceLSTM
