@@ -47,7 +47,7 @@ class FPbase:
             preprocess_function: Callable | None = None,
             feature_column: str = 'sequence',
             random_state: int = 52,
-            ignore_targets: list[str] = ['id']
+            ignore_targets: list[str] = ['id', 'Unnamed: 0']
         ) -> None:
         if dataset_path is None:
             dataset_path = DEFAULT_DATASET_PATH

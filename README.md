@@ -51,9 +51,15 @@
 
 
 ## Установка
-Установите библиотеку через ```pip install```:
+Установите библиотеку отдельно через ```pip install```:
 ```
 pip install --upgrade git+https://github.com/rimgro/biocadprotein.git
+```
+
+Или клонируйте весь репозиторий и установите зависимости:
+```
+git clone https://github.com/rimgro/biocadprotein.git
+pip install -e .
 ```
 
 Чтобы загрузить веса модели ESM3, примите [лицензию на Hugging Face](https://huggingface.co/EvolutionaryScale/esm3-sm-open-v1).
