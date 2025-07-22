@@ -54,6 +54,7 @@ class FPbase:
 
         # Чтение данных
         self.__dataset: pd.DataFrame = pd.read_csv(dataset_path)
+        ignore_targets = [target for target in ignore_targets if target in self.__dataset.columns]
 
         # Публичные поля
         self.targets: list = list(self.__dataset.drop(columns=[feature_column] + ignore_targets).columns)

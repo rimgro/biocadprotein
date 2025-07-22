@@ -171,10 +171,11 @@ print(metric)
 ```python
 from fpgen.prop_prediction.predictor import PropertiesPredictor
 
-predictor = PropertiesPredictor()
-properties = predictor.predict(generated_protein)
+seq = 'MVSKGEE...TGGMDELYK'
+predictor = PropertiesPredictor(model_name='sequence-cnn-full')
+y = predictor(x=seq, target='em_max')
 
-print(properties)
+print(y)
 ```
 
 ## Полный пайплайн

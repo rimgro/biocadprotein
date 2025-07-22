@@ -217,7 +217,6 @@ sequence.pickle
 /artem/
 nikita/
 /data/sequence.pickle
-*.pth
 pdb_structures/
 /nontrack/
 /data/archive/
