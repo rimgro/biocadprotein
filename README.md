@@ -72,7 +72,7 @@ pip install -e .
 </div>
 
 ```python
-from fpgen.generation.generator import ProteinGenerator
+from fpgen.api import ProteinGenerator
 
 from esm.models.esm3 import ESM3
 from esm.sdk.api import ESMProtein
@@ -169,7 +169,7 @@ print(metric)
 
 
 ```python
-from fpgen.prop_prediction.predictor import PropertiesPredictor
+from fpgen.api import PropertiesPredictor
 
 seq = 'MVSKGEE...TGGMDELYK'
 predictor = PropertiesPredictor(model_name='sequence-cnn-full')
@@ -183,9 +183,9 @@ print(y)
 Использование полного пайплайна для генерации белков с заданными свойствами
 
 ```python
-from fpgen.pipeline import Pipeline
+from fpgen.api import FullPipeline
 
-pipeline = Pipeline(template_protein, aplha_phelix, model)
+pipeline = FullPipeline(template_protein, aplha_phelix, model)
 result = pipeline.generate_proteins(n=300)
 ```
 

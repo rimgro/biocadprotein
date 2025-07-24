@@ -9,7 +9,6 @@
 
 import os
 
-import torch
 from pdbfixer import PDBFixer
 from openmm.app import PDBFile
 from openmm import Platform
